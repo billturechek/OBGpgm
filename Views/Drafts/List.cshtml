@@ -1,0 +1,143 @@
+﻿@model IEnumerable<OBGpgm.Models.Draft>
+
+@{
+    ViewData["Title"] = "List Draft Entries";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Year"]");
+            $("span.id_200 select").val("@ViewData["Season"]");
+        });
+    </script>
+}
+<div class="container">
+
+    <h1>List Draft Entries</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <form asp-action="List" method="get">
+        <div class="form-actions no-color">
+            <div>
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label class="col-form-label">Year </label>
+                        <span class="id_100">
+                            <select asp-items="@ViewBag.Years" id="Year" name="Year"
+                                onchange="document.getElementById('btnSubmit').click();">
+                                <option value="">Please select</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-sm-2">
+                        <label class="col-form-label">Season</label>
+                        <span class="id_200">
+                            <select asp-items="@ViewBag.Seasons" id="Season" name="Season"
+                                onchange="document.getElementById('btnSubmit').click();">
+                                <option value="">Select season</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-sm-2">
+                        <input id="btnSubmit" type="submit" value="Refresh" class="btn btn-primary" hidden />
+
+                    </div>
+            </div>
+        </div>
+    </form>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DraftSessionId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DraftSelection)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DraftPreDraft)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.DraftPlayerId)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.DraftTeamId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DraftType)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DraftSessionId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DraftSelection)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DraftPreDraft)
+                    </td>
+                    <td>
+                        @foreach (Player p in ViewBag.Players)
+                        {
+                            if (item.DraftPlayerId == p.PlayerId)
+                            {
+                                foreach (var mem in ViewBag.MemberId)
+                                {
+                                    string thisMem = "";
+                                    if (p.MemberId.ToString() == mem.Value)
+                                    {
+                                        thisMem = mem.Text;
+                                        @(thisMem)
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+
+                        @Html.DisplayFor(modelItem => item.DraftPlayerId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DraftTeamId)
+                    </td>
+                    <td>
+                        @foreach (int i in Enum.GetValues(typeof(DraftTypes)))
+                        {
+                            string draftType = "";
+                            if (i == (int)item.DraftType)
+                            {
+                                draftType = Enum.GetName(typeof(DraftTypes), i);
+                                @(draftType)
+                                break;
+                            }
+                        }
+                    </td>
+
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Get" asp-route-id="@item.DraftId">View | </a>
+                            <a asp-action="Update" asp-route-id="@item.DraftId">Update | </a>
+                            <a asp-action="Delete" asp-route-id="@item.DraftId">Delete</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Get" asp-route-id="@item.DraftId">View</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Article>
+
+@{
+    ViewData["Title"] = "List Articles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="container">
+        <h1>List of Articles</h1>
+        <h3 class="message">@TempData["Message"]</h3>
+        <p>
+            <a asp-action="Insert">Insert New Article</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.articleId)
+                    </th>
+                    <th>
+                        <h5>Author</h5>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.title)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.articleId)
+                        </td>
+                        <td>
+                            @foreach (SelectListItem m in ViewBag.MemberName)
+                            {
+                                @if (item.authId.ToString() == m.Value)
+                                {
+                                    @m.Text
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.title)
+                        </td>
+                        <td>
+                            @if (User.IsInRole("Super Admin"))
+                            {
+                                <a asp-action="Read" asp-route-id="@item.articleId">View | </a>
+                                <a asp-controller="Comments" asp-action="Write" asp-route-id="@item.articleId">Comment | </a>
+                                <a asp-action="Update" asp-route-id="@item.articleId">Update | </a>
+                                <a asp-action="Delete" asp-route-id="@item.articleId">Delete</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Read" asp-route-id="@item.articleId">View | </a>
+                                <a asp-controller="Comments" asp-action="Write" asp-route-id="@item.articleId">Comment</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>

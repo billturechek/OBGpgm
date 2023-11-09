@@ -1,0 +1,194 @@
+﻿@model IEnumerable<OBGpgm.Models.Player>
+
+@{
+    ViewData["Title"] = "Team Roster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Year"]");
+            $("span.id_200 select").val("@ViewData["Season"]");
+            $("span.id_300 select").val("@ViewData["Number"]");
+        });
+    </script>
+}
+
+
+<div class="container">
+    @if (ViewBag.Named == "True")
+    {
+        <h2>Members of Team @ViewBag.TeamNumber, "@ViewBag.TeamName" in
+            @ViewData["SeasonName"] of @ViewData["Year"]</h2>
+    }
+    else
+    {
+
+        <h2>Members of Team @ViewBag.TeamNumber in 
+            @ViewData["SeasonName"] of @ViewData["Year"]</h2>
+    }
+    <h3 class="message text-success">@TempData["Message"]</h3>
+
+    <form asp-action="TeamRoster" method="get">
+        <div class="form-actions no-color">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label class="col-form-label">Year </label>
+                    <span class="id_100">
+                        <select asp-items="@ViewBag.Years" id="Year" name="Year"
+                            onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <label class="col-form-label">Season</label>
+                    <span class="id_200">
+                        <select asp-items="@ViewBag.Seasons" id="Season" name="Season"
+                            onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Select season</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-3">
+                    <label class="col-form-label">Team #</label>
+                    <span class="id_300">
+                        <select asp-items="@ViewBag.TeamIds" id="Number" name="Number"
+                            onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Select team</option>
+                        </select>
+                    </span>
+                </div>
+                    
+                <div class="col-sm-2">
+                    <input id="btnSubmit" type="submit" value="Refresh" class="btn btn-primary" hidden />
+                    @if (User.IsInRole("Admin"))
+                    {                        
+                        <button class="btn btn-info"
+                            name="make"
+                            type="submit"
+                            asp-controller="Players"
+                            asp-action="MakeSheet">
+                            Make Sheet
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Portrait
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Team Name
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member.Cellphone)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="@(item.Member.IsDeceased  ? "table-secondary" : string.Empty) ">
+                    <td>
+                        @foreach (Member m in ViewBag.Members)
+                        {
+                            @if (item.MemberId == m.MemberId)
+                            {
+                                @*m.FullName *@
+                                @if (m.PortraitId == 0 || m.PortraitId == null)
+                                {
+                                    <img class="img-responsive full-width" src="~/images/thumbNoImage.png" />
+                                }
+                                else
+                                {
+                                    @foreach (Portrait i in ViewBag.Images)
+                                    {
+                                        @if (m.PortraitId == i.Id)
+                                        {
+                                            @*<a asp-controller="Portraits" asp-action="Show" asp-route-id="@m.PortraitId" />*@
+                                            <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(i.ThumbImage)" />
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                    </td>
+                    <td>
+                        @foreach (var mem in ViewBag.MemberId)
+                        {
+                            string thisMem = "";
+                            if (item.MemberId.ToString() == mem.Value)
+                            {
+                                thisMem = mem.Text;
+                                @(thisMem)
+                                break;
+                            }
+                        }
+                    </td>
+                    <td>
+                        @foreach (Team team in ViewBag.Teams)
+                        {
+                            string thisTeam = "";
+                            if (item.Team.TeamId > 0)
+                            {
+                                if (team.TeamId == item.TeamId)
+                                {
+                                    thisTeam = team.TeamName;
+                                    @(thisTeam)
+                                    break;
+                                }
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Member.Cellphone)
+                    </td>
+
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            if (item.Member.PortraitId != null && item.Member.PortraitId > 0)
+                            {
+                                <a asp-action="Show" asp-controller="Portraits" asp-route-id="@item.Member.PortraitId">View | </a>
+                            }
+                            else
+                            {
+                                <a asp-action="Get" asp-route-id="@item.PlayerId">View | </a>
+                            }
+                            <a asp-action="Update" asp-route-id="@item.PlayerId">Update | </a>
+                            <a asp-action="Delete" asp-route-id="@item.PlayerId">Delete</a>
+                        }
+                        else
+                        {
+                            if (item.Member.PortraitId != null && item.Member.PortraitId > 0)
+                            {
+                                <a asp-action="Show" asp-controller="Portraits" asp-route-id="@item.Member.PortraitId">View</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Get" asp-route-id="@item.PlayerId">View</a>
+                            }
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

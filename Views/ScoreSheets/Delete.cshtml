@@ -1,0 +1,55 @@
+﻿@model OBGpgm.Models.ScoreSheet
+
+@{
+    ViewData["Title"] = "Delete Score Sheet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1>Delete Score Sheet</h1>
+
+    <h3>Are you sure you want to delete this?</h3>
+    <h4>ScoreSheet</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SsDivision)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SsDivision)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SsVteam)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SsVteam)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SsHpoints)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SsHpoints)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SsVpoints)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SsVpoints)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SsDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SsDate)
+        </dd>
+
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="SsSessionId" />
+        <input type="hidden" asp-for="SsWeek" />
+        <input type="hidden" asp-for="SsHteam" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

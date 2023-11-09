@@ -1,0 +1,56 @@
+﻿@model OBGpgm.Models.Ptlog
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var returnPage = Convert.ToInt32(ViewBag.returnPage);
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Ptlog</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ptltype)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ptltype)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PtlDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PtlDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ptlmember)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ptlmember)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ptlteam)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ptlteam)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PtlplayerNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PtlplayerNavigation.PlayerId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PtlsessionNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PtlsessionNavigation.SessionId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Ptlid" asp-route-pg="@returnPage">Edit</a> |
+    <a asp-action="Index" asp-route-pg="@returnPage">Back to List</a>
+</div>

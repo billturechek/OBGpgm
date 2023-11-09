@@ -1,0 +1,90 @@
+﻿@model OBGpgm.Models.Photo
+
+@{
+    ViewData["Title"] = "Upload photo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1 class="text-center">Upload Photograph</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <h4></h4>
+    <hr />
+    <form asp-action="Upload" method="post"
+          enctype="multipart/form-data">
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <h4 class="text-center text-primary">Either select an existing photo group or create a new photo group</h4>
+                <p></p>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-sm-5" style="display:inline-block;">
+                <label class="col-form-label">Groups</label>
+                <select asp-items="@ViewBag.GroupIds" id="Group" name="Group">
+                    <option value="">Please select</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <h4 class="text-primary">-OR-</h4>
+            </div>
+            <div class="form-group col-md-6" style="display: inline-flex;">
+                <label asp-for="groupName" class="control-label">New Group</label>
+                <div class="col-md-6">
+                    <input asp-for="groupName" class="form-control" />
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="memberId" class="control-label"></label>
+                    <input asp-for="memberId" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group">
+                    <h4><label asp-for="articleId" class="control-label"></label></h4>
+                    <input asp-for="articleId" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="articleId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="caption" class="control-label"></label>
+                    <input asp-for="caption" class="form-control" />
+                    <span asp-validation-for="caption" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="notes" class="control-label"></label>
+                    <input asp-for="notes" class="form-control" />
+                    <span asp-validation-for="notes" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="ImageFile" class="control-label"></label>
+                    <input asp-for="ImageFile" accept="image/*" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Upload Photo" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="List">Back to List</a>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

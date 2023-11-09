@@ -1,0 +1,133 @@
+﻿@model IEnumerable<OBGpgm.Models.Team>
+@*inject SignInManager<AppUser> signInManager; *@
+@{
+    ViewData["Title"] = "List Teams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Year"]");
+            $("span.id_200 select").val("@ViewData["Season"]");
+            $('.collapse').collapse();
+        });
+
+    </script>
+}
+
+<div class="container">
+    <h1>Teams by Season Sorted byTeam Number</h1>
+    <form asp-action="Accordian" method="get">
+        <div class="form-actions no-color">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label class="col-form-label">Year </label>
+                    <span class="id_100">
+                        <select asp-items="@ViewBag.Years" id="Year" name="Year"
+                                onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <label class="col-form-label">Season</label>
+                    <span class="id_200">
+                        <select asp-items="@ViewBag.Seasons" id="Season" name="Season" 
+                            onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Select season</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <input id="btnSubmit" type="submit" value="Refresh" class="btn btn-primary" hidden/> 
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="accordion" id="accordion">
+        @{
+            int counter = 0;
+            foreach (var item in Model)
+            {
+                counter++;
+                <div class="card">                    
+                    <div class="card-header" id="heading@(counter.ToString())">
+                        <button type="button" class="btn btn-link collapsed"
+                            data-bs-toggle="collapse" data-bs-target="#collapse@(counter.ToString())"
+                            aria-expanded="false" aria-controls="collapse@(counter.ToString())"
+                            >
+                            <h2>
+                                (@Html.DisplayFor(modelItem => item.TeamNumber))
+                                @Html.DisplayFor(modelItem => item.TeamName)
+                            </h2>
+                        </button>
+                    </div>
+                    <div id="collapse@(counter.ToString())" class="collapse" role="button" 
+                         aria-controls="collapse@(counter.ToString())" data-bs-parent="#accordion"> 
+                        <div class="card-body">
+                            @foreach (Player c in ViewBag.Captains)
+                            {
+                                @if (c.TeamId == item.TeamId)
+                                {
+                                    @foreach (Member m in ViewBag.Members)
+                                    {
+                                        @if (c.MemberId == m.MemberId)
+                                        {
+                                            @m.FullName
+                                            @if (m.PortraitId == 0 || m.PortraitId == null)
+                                            {
+                                                <img class="img-responsive full-width" src="~/images/thumbNoImage.png" />
+                                            }
+                                            else
+                                            {
+                                                @foreach (Portrait i in ViewBag.Images)
+                                                {
+                                                    @if (m.PortraitId == i.Id)
+                                                    {
+                                                        @*<a asp-controller="Portraits" asp-action="Show" asp-route-id="@m.PortraitId" />*@
+                                                        <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(i.ThumbImage)" />
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            @foreach (Player p in ViewBag.Players)
+                            {
+                                @if (p.TeamId == item.TeamId)
+                                {
+                                    @foreach (Member m in ViewBag.Members)
+                                    {
+                                        @if (p.MemberId == m.MemberId)
+                                        {
+                                            @m.FullName
+                                            @if (m.PortraitId == 0 || m.PortraitId == null)
+                                            {
+                                                <img class="img-responsive full-width" src="~/images/thumbNoImage.png" />
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                @foreach (Portrait i in ViewBag.Images)
+                                                {
+                                                    @if (m.PortraitId == i.Id)
+                                                    {
+                                                        @*<a asp-controller="Portraits" asp-action="Show" asp-route-id="@m.PortraitId" />*@
+                                                        <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(i.ThumbImage)" />
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

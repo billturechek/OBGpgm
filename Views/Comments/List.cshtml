@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Comment>
+
+@{
+    ViewData["Title"] = "List File Types Used";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h1>List of Comments</h1>
+    <h3 class="message">@TempData["Message"]</h3>
+    <p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.commentId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.articleId)
+                    </th>
+                    <th>
+                        <h5>Author</h5>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.commentId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.articleId)
+                        </td>
+                        <td>
+                            @foreach (SelectListItem m in ViewBag.MemberId)
+                            {
+                                @if (item.authorId.ToString() == m.Value)
+                                {
+                                    @m.Text
+                                }
+                            }
+                        </td>
+                        <td>
+                            @if (User.IsInRole("Super Admin"))
+                            {
+                                <a asp-action="Get" asp-route-id="@item.commentId">View | </a>
+                                <a asp-action="Update" asp-route-id="@item.commentId">Update | </a>
+                                <a asp-action="Delete" asp-route-id="@item.commentId">Delete</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Get" asp-route-id="@item.commentId">View</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+</div>

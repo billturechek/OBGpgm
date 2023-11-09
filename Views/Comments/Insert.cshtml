@@ -1,0 +1,78 @@
+﻿@model OBGpgm.Models.Comment
+
+@inject SignInManager<ApplicationUser> signInManager;
+@{
+    ViewData["Title"] = "Insert Comment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    <script>
+    window.onload = function () {
+        var published = document.getElementById("published");
+        var div = document.getElementById("addButton");
+        if (published.checked == true) {
+            div.style.display = "block";
+        }
+        else {
+            div.style.display = "none";
+        }
+    }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<div class="container">
+    <h1>Comment on Article</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <h4>Article</h4>
+    <hr />
+    <form asp-action="Insert">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <h4><label asp-for="authorId" class="control-label"></label></h4>
+                    <input asp-for="authorId" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="authorId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <h4><label asp-for="articleId" class="control-label"></label></h4>
+                <input asp-for="articleId" class="form-control" readonly="readonly" />
+                <span asp-validation-for="articleId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <h4><label asp-for="email" class="control-label"></label></h4>
+                <input asp-for="email" class="form-control" readonly="readonly" />
+                <span asp-validation-for="email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <div class="form-group">
+                    <h4><label asp-for="itemBody" class="control-label">Enter your comment below:</label></h4>
+                    @Html.TextAreaFor(e => e.itemBody, 10, 55, null)
+                    <span asp-validation-for="itemBody" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <h4><label asp-for="pubDate" class="control-label"></label></h4>
+                <input asp-for="pubDate" class="form-control" readonly="readonly" />
+                <span asp-validation-for="pubDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input type="submit" value="Insert" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="List">Back to List</a>
+    </div>
+ </div>
+

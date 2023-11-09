@@ -1,0 +1,69 @@
+﻿@model Portrait
+
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h3>@Model.Member.FullName</h3>
+    <hr />
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="@(Model.Member.IsDeceased ? "flip-card-front-deceased" : "flip-card-front")">
+                
+                @if (Model.Member.IsDeceased)
+                {
+                    <img class="img-responsive full-width portrait"
+                     style="border:30px; border-color:gray; border-style:inset;"
+                     src="data:image/jpeg;base64,@Convert.ToBase64String(Model.LargeImage)" />
+                }
+                else
+                {
+                    <img class="img-responsive full-width portrait"
+                     style="border:30px; border-color:brown; border-style:inset;"
+                     src="data:image/jpeg;base64,@Convert.ToBase64String(Model.LargeImage)" />
+                }
+            </div>
+            <div class="flip-card-back">
+                <h1>@Model.Member.FullName</h1>
+                @if (Model.Member.IsDeceased)
+                {
+                    <p>@Model.Member.FirstName has passed away</p>
+                }
+                <p>Hometown:  @Model.Member.Hometown</p>
+                @if (Model.Member.Wife != null)
+                {
+                    <p>Wife's name:  @Model.Member.Wife</p>
+                }
+                @if (Model.Member.Children != null)
+                {
+                    <p>Number of kids:  @Model.Member.Children</p>
+                    @if (Model.Member.Grand != null)
+                    {
+                        <p>Number of grand kids:  @Model.Member.Grand</p>
+                        @if (Model.Member.Great != null)
+                        {
+                            <p>Number of grand kids:  @Model.Member.Great</p>
+                        }
+                    }
+                }
+                <p>Address:  @Model.Member.Address1</p>
+                <p>Village:  @Model.Member.Village</p>
+                <p>Moved here:  @Model.Member.YearMoved</p>
+                <p>Moved from: @Model.Member.MovedFrom</p>
+                <p>Job:  @Model.Member.Job</p>
+                <p>Phone:  @Model.Member.Telephone</p>
+                <p>Email:  @Model.Member.Email</p>
+                <p>Interests:  @Model.Member.Interests</p>
+                @if (Model.Member.Military != null)
+                {
+                    <p>Military branch:  @Model.Member.Military</p>
+                    <p>Years of service:  @Model.Member.YearsMilitary</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div>
+        <a href='javascript:history.go(-1)'>Return to previous</a>
+    </div>
+</div>

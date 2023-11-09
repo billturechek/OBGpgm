@@ -1,0 +1,195 @@
+﻿@model ScheduleViewModel
+
+@{
+    ViewData["Title"] = "View Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var curSession = ViewBag.curSession as OBGpgm.Models.Session;
+    var season = (snType)int.Parse(curSession.Season.ToString());
+    
+}
+}
+@section Scripts{
+    <script>
+        /* this script sets the dropdown for teams */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Teams"]");
+        });
+    </script>
+}
+
+<div class="container-xxl justify-content-center">
+    <h1>Make Schedule</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <form asp-action="Make" method="get">
+        <div class="form-actions no-color">
+            <p>
+                <div class="col-sm-10">
+                    <label class="col-sm-3 col-form-label" style="text-align:right">Number of Teams</label>
+                    <span class="id_100">
+                        <select id="Teams" name="Teams" class="col-sm-2">
+                            <option value="">Select # of teams</option>
+                            <option value="24">24</option>
+                            <option value="22">22</option>
+                            <option value="20">20</option>
+                            <option value="18">18</option>
+                            <option value="16">16</option>
+                            <option value="15">15</option>
+                            <option value="14">14</option>
+                            <option value="13">13</option>
+                            <option value="12">12</option>
+                            <option value="11">11</option>
+                            <option value="10">10</option>
+                            <option value="9">9</option>
+                            <option value="8">8</option>
+                        </select>
+                        </span>
+                    <input type="submit" name="Refresh" value="Refresh" class="btn btn-primary" />
+                </div>
+            </p>
+        </div>
+    </form>
+
+    <h4>Schedule</h4>
+    <hr />
+    <form asp-action="Make" method="post"
+                  enctype="multipart/form-data">
+    @{
+        var hteams = int.Parse(ViewBag.teams);
+        var hmatches = 0;
+        var numMatches = ViewBag.numMatches;
+        var sessionTimes = ViewBag.sessionTimes;        
+        var tablesToUse = ViewBag.tableAssignment;
+        var theTables = ViewBag.numTables;
+        int matchesInSession = 0;
+        string ttu = tablesToUse;
+        string[] tbs = ttu.Split(" ");
+        int numberOfColumns = (hteams / 2) + (hteams % 2) + 1;
+        IEnumerable<Schedule> data = Model.DataList;
+
+        int totalSessions = 0;
+        switch (numMatches)
+        {
+            case < 10:
+                totalSessions = 1;
+                break;
+            case < 18:
+                totalSessions = 2;
+                break;
+            default:
+                totalSessions = 3;
+                break;                
+        }
+
+        if (hteams % 2 == 0)
+        {
+            hmatches = hteams / 2;
+        }
+        else
+        {
+            hmatches = (hteams / 2) + 1;
+        }
+        DateTime sDate = DateTime.Parse(curSession.StartDate);
+
+        int x = 0;
+        var hrows = data.Count() / hmatches;
+        <div class="row sticky-top bg-white justify-content-center">
+            <div class="sched col-@numberOfColumns text-center justify-content-center"><h2>OBG Men's Billiard Club</h2></div>
+        </div>
+        <div class="row justify-content-center">            
+            <div class="sched col-@numberOfColumns text-center justify-content-center"><h3>@season @sDate.Year</h3></div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="sched col-1 justify-content-center"></div>
+            @foreach (string numOfMatches in theTables)
+            {
+                matchesInSession = int.Parse(numOfMatches);
+                string sTime = sessionTimes[x];
+                <div class="sched col-@matchesInSession text-center justify-content-center">@sTime</div>
+                x++;
+            }
+            @if(hteams%2>0){
+                <div class="sched col-1"></div>
+            }
+        </div>
+        <div class="row justify-content-center">
+            <div class="sched col-1 d-flex justify-content-center">
+                date
+            </div>
+            @* iterate thru weeks worth of matches *@
+            @for (var m = 0; m < hmatches; m = m + numMatches)
+            {
+                @if (data.ElementAt(m).VisitingTeam == 0)
+                {
+                    <div class="sched col-1 d-flex justify-content-center">Bye</div>
+                }
+                else
+                { 
+                    @foreach (var tb in tbs)
+                    { 
+                        @if(@tb!="")
+                        {
+                            <div class="sched col-1 d-flex justify-content-center">@tb</div>
+                        }
+                    }
+                }
+            }
+        </div>
+        var teams = int.Parse(ViewBag.teams);
+        var matches = 0;
+        if(teams % 2 == 0 )
+        {
+            matches = teams/2;
+        }
+        else
+        {
+            matches = (teams/2) + 1;
+        }
+
+        var rows = data.Count()/matches;
+
+        @* iterate thru every schedule entry in groups of matches/week *@
+        for (var i = 0; i < data.Count(); i = i + matches)
+        {
+            <div class="row justify-content-center">
+                <div class="sched col-1 d-flex justify-content-center">
+                    @sDate.AddDays(7 * (i/matches)).ToShortDateString()
+                </div>
+                @* iterate thru weeks worth of matches *@
+                @for (var m = 0; m < matches; m++)
+                {
+                    @if(data.ElementAt(i+m).VisitingTeam==0)
+                    {
+                        <div class="sched col-1 d-flex justify-content-center">@data.ElementAt(i+m).HomeTeam</div>
+                    }
+                    else
+                    {
+                        <div class="sched col-1 d-flex justify-content-center">@data.ElementAt(i+m).HomeTeam-@data.ElementAt(i+m).VisitingTeam</div>
+                    }                         
+                }
+            </div>
+        }
+        <div class="form-group">
+            <input type="submit" value="Save Schedule" class="btn btn-primary" />
+        </div>
+    }
+    </form>
+    @if (TempData["Message"] != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                var message = '@TempData["Message"]';
+                alert(message);
+                TempData["Message"].Clear();
+            };
+        </script>
+    }
+
+
+</div>
+<div>
+    @if (User.IsInRole("Admin"))
+    {
+        //<a asp-action="Update" asp-route-id="@item.Id">Update | </a>
+    }
+    <a asp-action="List">Back to List</a>
+</div>

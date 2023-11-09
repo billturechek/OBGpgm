@@ -1,0 +1,98 @@
+﻿@model IEnumerable<OBGpgm.Models.ScoreSheet>
+@using System
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<h1>All Score Sheets</h1>
+
+<p>
+    <a asp-action="Insert" asp-route-pg="@pager.CurrentPage">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SsSession)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SsDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SsWeek)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SsHteam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SsVteam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SsHpoints)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SsVpoints)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SsSessionId)
+            </td>
+            <td>
+                @{
+                    if (item.SsDate != null) 
+                    {
+                        DateTime date = (DateTime)item.SsDate;
+                        var shortdate = date.ToShortDateString(); 
+                        @shortdate
+                    }
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SsWeek)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SsHteam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SsVteam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SsHpoints)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SsVpoints)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.SsSessionId"
+                                         asp-route-week="@item.SsWeek"
+                                         asp-route-hTeam="@item.SsHteam"
+                                         asp-route-pg="@pager.CurrentPage">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.SsSessionId"
+                                           asp-route-week="@item.SsWeek"
+                                           asp-route-hTeam="@item.SsHteam"
+                                           asp-route-pg="@pager.CurrentPage">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.SsSessionId"
+                                           asp-route-week="@item.SsWeek"
+                                           asp-route-hTeam="@item.SsHteam"
+                                           asp-route-pg="@pager.CurrentPage">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<partial name="_pager" model="@pager" />

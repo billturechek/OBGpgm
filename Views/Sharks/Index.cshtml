@@ -1,0 +1,81 @@
+﻿@model IEnumerable<OBGpgm.Models.Shark>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SharkDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SharkType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Points)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Player)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Session)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MemberId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SharkDate)
+            </td>
+            <td>
+                @{var xx = item.SharkType;} @xx
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Points)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player.Member.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Session.SessionId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SharkId" asp-route-pg="@pager.CurrentPage">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SharkId" asp-route-pg="@pager.CurrentPage">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SharkId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<partial name="_pager" model="@pager" />

@@ -1,0 +1,236 @@
+﻿@model OBGpgm.Models.DraftViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var selected = document.getElementById("selected");
+            var cbx = document.getElementById('divCbxReturn');
+
+            /*
+            var optionsLength = document.getElementById("Selected").length;
+            alert(optionsLength);
+            if(optionsLength > 0){
+                cbx.style.display = "block";
+            } 
+            else 
+            {
+                cbx.style.display = "none";
+            }
+           */
+            
+            var setRetn = '@ViewBag.SetReturn';
+            if (setRetn == "true"){
+                cbxReturn.checked = true;
+            }
+            else {
+                cbxReturn.checked = false;
+            }
+            var divReturn = document.getElementById("divReturn");
+            var divSelect = document.getElementById("divSelect");
+            divReturn.style.display = cbxReturn.checked ? "block" : "none";
+            divSelect.style.display = cbxReturn.checked ? "none" : "block";
+            
+        });
+
+        function ShowHideDiv(divx) {
+            var select = document.getElementById("session");
+            var option = select.options[select.selectedIndex];
+            var cbx = document.getElementById("cbxReturn");
+
+            var divReturn = document.getElementById("divReturn");
+            var divSelect = document.getElementById("divSelect");
+            divReturn.style.display = cbx.checked ? "block" : "none";
+            divSelect.style.display = cbx.checked ? "none" : "block";
+            if (cbx.type == "checkbox") {
+                if (cbx.checked) {
+                    document.form1.action = "/Drafts/SetReturn/" + option.value;
+                }
+                else {
+                    document.form1.action = "/Drafts/SetSelect/" + option.value;
+                }
+                document.form1.submit();
+            }
+        }
+
+
+
+        function DoPostBack() {
+            var returnPlayers = document.getElementById("cbxReturn");
+            if (returnPlayers.type == "checkbox") {
+                var select = document.getElementById("session");
+                var option = select.options[select.selectedIndex];
+                if (option.value != "Please select") {
+                    var avselect = document.getElementById("PlayerList");
+                    var avoption = avselect.options[avselect.selectedIndex];
+                }
+                if (!returnPlayers.checked) {
+                    if (avoption.value != "Please select") {
+                        document.form1.action = "/Drafts/GetSelections/" + option.value + "?pid=" + avoption.value;
+                    }
+                    else {
+                        document.form1.action = "/Drafts/GetSelections/" + option.value;
+                    }
+                    document.form1.submit();
+                }
+                else {
+                    if (avoption.value != "Please select") {
+                        document.form1.action = "/Drafts/ReturnSelection/" + option.value + "?pid=" + avoption.value;
+                    }
+                    else {
+                        document.form1.action = "/Drafts/ReturnSelection/" + option.value;
+                    }
+                    document.form1.submit();
+                }
+            }
+        }
+
+
+        /* this script sets the predraft checkbox value */
+        function SetPreDraft() {
+            var preDraft = document.getElementById("preDraft");
+            if (preDraft.type == "checkbox") {
+                if (preDraft.checked) {
+                    document.form1.action = "/Drafts/SetPreDraft/1";
+                }
+                else {
+                    document.form1.action = "/Drafts/SetPreDraft/0";
+                }
+                document.form1.submit();
+            }
+        };
+
+
+    </script>
+}
+
+<div class="container">
+    <h1>Enter Draft (or pre-draft) Selections</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    
+    <form name="form1" asp-action="Enter">
+        <div class="row mb-3">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-md-4">
+                <input class="form-check-input" type="checkbox" id="preDraft"
+                    onchange="SetPreDraft();" asp-for="draft.DraftPreDraft"
+                    checked="@ViewBag.PreDraft" value="@ViewBag.PreDraft" />
+                <label class="form-check-label">Pre-draft</label>
+            </div>
+            <div class="form-group col-md-4" id="divCbxReturn">
+                <input class="form-check-input" type="checkbox" id="cbxReturn"
+                    onchange="ShowHideDiv(this);"  />
+                <label class="form-check-label">Return Players</label>
+            </div>
+        </div>
+
+
+        
+        <div class="row mb-3">
+                <input type="hidden" asp-for="draft.DraftId" value="@ViewBag.DraftID" />
+            <label class="col-sm-1 col-form-label" asp-for="draft.DraftSessionId">SessionId</label>
+            <div class="col-sm-2">
+                <select asp-for="draft.DraftSessionId" asp-items="@ViewBag.Sessions"
+                    onchange="DoPostBack();" id="session" name="session" class="form-control">
+                    <option value="">Please select</option>
+                </select>
+            </div>
+            <label class="col-sm-1 col-form-label" asp-for="draft.DraftDivision">Division</label>
+            <div class="col-sm-2">
+                <input asp-for="draft.DraftDivision" class="form-control" value="@ViewBag.Division" />
+                <span asp-validation-for="draft.DraftDivision" class="text-danger"></span>
+            </div>
+            <label class="col-sm-1 col-form-label" asp-for="draft.DraftType" class="control-label"></label>
+            <div class="col-sm-2">
+                <select asp-for="draft.DraftType" asp-items="@ViewBag.DraftType" class="form-control">
+                    <option selected="selected" value="">Please select</option>
+                </select>
+                <span asp-validation-for="draft.DraftType" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-sm-1 col-form-label" asp-for="draft.DraftSelection" class="control-label">Selection</label>
+            <div class="col-sm-2">
+                <select asp-for="draft.DraftSelection" asp-items="@ViewBag.Selections" class="form-control">
+                    <option value="">Please select</option>
+                </select>
+                <span asp-validation-for="draft.DraftSelection" class="text-danger"></span>
+            </div>
+            <label class="col-sm-1 col-form-label" asp-for="draft.DraftRound" class="control-label"></label>
+            <div class="col-sm-2">
+                <input asp-for="draft.DraftRound" class="form-control" value="@ViewBag.DraftRound" />
+                <span asp-validation-for="draft.DraftRound" class="text-danger"></span>
+            </div>
+            <label class="col-sm-1 col-form-label" asp-for="draft.DraftPosition" class="control-label"></label>
+            <div class="col-sm-2">
+                <input asp-for="draft.DraftPosition" class="form-control" value="@ViewBag.DraftPosition" />
+                <span asp-validation-for="draft.DraftPosition" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <input type="hidden" asp-for="team.TeamId" value="@ViewBag.teamID" />
+            <label class="col-sm-1 col-form-label" asp-for="team.TeamNumber">Team #</label>
+            <div class="col-sm-2">
+                <input asp-for="team.TeamNumber" class="form-control" value="@ViewBag.teamNumber" />
+                <span asp-validation-for="team.TeamNumber" class="text-danger"></span>
+            </div>
+            <label class="col-sm-1 col-form-label" asp-for="member.FullName" class="control-label">Captain</label>
+            <div class="col-sm-2">
+                <input asp-for="member.FullName" class="form-control" value="@ViewBag.captain" />
+                <span asp-validation-for="member.FullName" class="text-danger"></span>
+            </div>
+            <label class="col-sm-1 col-form-label" asp-for="team.TeamName" class="control-label"></label>
+            <div class="col-sm-2">
+                <input asp-for="team.TeamName" class="form-control" value="@ViewBag.teamName" />
+                <span asp-validation-for="team.TeamName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <input type="hidden" asp-for="player.PlayerId" value="@ViewBag.SelectedValue" />
+            <label class="col-sm-2 col-form-label">Select a Player</label>
+            <div class="col-sm-2">
+                <select asp-items="@ViewBag.PlayerList"
+                        onchange="DoPostBack();" id="PlayerList" class="form-control">
+                    <option selected="selected" value="">@ViewBag.SelectedPlayer</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4" display="none">
+                <select asp-items="@ViewBag.Selected" id="Selected" class="form-control" hidden>
+                    <option selected="selected" value="">@ViewBag.SelectedPlayer</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <select asp-items="@ViewBag.Available" hidden
+                        onchange="DoPostBack();" name="available" id="available" class="form-control">
+                    <option selected="selected" value="">@ViewBag.SelectedPlayer</option>
+                </select>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="form-group col-md-1" id="divSelect">
+                    <input type="submit" value="Select" name="Command" class="btn btn-primary" />
+            </div>
+            <div class="form-group col-md-2" id="divReturn">
+                    <input type="submit" id="btnreturn" name="Command"
+                    value="Return to Available" class="btn btn-secondary" />
+            </div>
+            <div class="form-group col-md-2">
+                <button class="btn btn-info"
+                    name="make"
+                    type="submit"
+                    asp-controller="Drafts"
+                    asp-action="MakeSheet">
+                    Make Sheet
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

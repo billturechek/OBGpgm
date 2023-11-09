@@ -1,0 +1,61 @@
+﻿@model List<Comment> 
+
+@{
+    ViewData["Title"] = "List Answers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+    <div class="container">
+        @if (Model.Count > 0)
+        {
+            <h3>Answers on Question - @Model.First().articleId</h3>
+        }
+        else
+        {
+            <h3>No Comments Found</h3>
+        }
+        <hr class="comments" />
+        @foreach (Comment item in Model)
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>
+                        by
+                        @foreach (SelectListItem mem in ViewBag.MemberName)
+                        {
+                            @if (item.authorId.ToString() == mem.Value)
+                            {
+                                @mem.Text
+                                break;
+                            }
+                        }
+                        &nbsp;
+                        @foreach (SelectListItem mem in ViewBag.MemberEmail)
+                        {
+                            @if (item.authorId.ToString() == mem.Value)
+                            {
+                                @mem.Text
+                                break;
+                            }
+                        }
+                    </h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>on @item.pubDate</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>@item.itemBody</h4>
+                </div>
+            </div>
+            <hr class="comments" />
+        }
+    </div>   
+<div class="container">
+    <a href="#" onclick='history.go(-1);'>Go Back to Previous</a>
+</div>
+

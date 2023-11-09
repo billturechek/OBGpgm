@@ -1,0 +1,81 @@
+﻿@model IEnumerable<OBGpgm.Models.Article>
+@{
+    ViewData["Title"] = "List Articles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Year"]");
+            $("span.id_200 select").val("@ViewData["Season"]");
+            $('.collapse').collapse();
+            $('.dropdown-toggle').dropdown();
+        });
+
+    </script>
+}
+
+<div class="container">
+    @if (ViewBag.Category == 1)
+    {
+        <h1>Club News Articles</h1>
+    }
+    else
+    {
+        <h1>Member News Articles</h1>
+    }
+    <form asp-action="Scan" method="get">
+        <div class="form-actions no-color">
+            <div class="col-sm-10">
+                
+                <h4 class="d-inline-block">
+                    <a asp-controller="Articles" asp-action="Write" asp-route-category="2">Write another News Article | </a>
+                    <a asp-controller="Home" asp-action="Index">Back to Home page</a>
+                </h4>
+            </div>
+    </div>
+    </form>
+    <div class="accordion" id="accordion">
+        @{
+            int counter = 0;
+            string author = "";
+            foreach (var item in Model)
+            {
+                counter++;
+                foreach (SelectListItem m in ViewBag.MemberName)
+                {
+                    if (item.authId.ToString() == m.Value)
+                    {
+                        author = m.Text;
+                    }
+                }
+                <div class="card">
+                    <div class="card-header" id="heading@(counter.ToString())">
+                        <button type="button" class="btn btn-link collapsed"
+                                data-toggle="collapse" data-target="#collapse@(counter.ToString())"
+                                aria-expanded="false" aria-controls="collapse@(counter.ToString())">
+                            <h4 class="d-inline-block">
+                                @Html.DisplayFor(modelItem => item.title)
+                            </h4>
+                            <strong class="text-secondary">
+                                by @author
+                            </strong>
+                        </button>
+                    </div>
+                    <div id="collapse@(counter.ToString())" class="collapse" role="button"
+                         aria-controls="collapse@(counter.ToString())" data-parent="#accordion">
+                        <div class="card-body">
+                            <h4>@item.slug</h4>
+                            <h4>
+                                @Html.ActionLink("Read entire article", "Read", "Article", new { id = @item.articleId }, new { @class = "btn btn-secondary" } )
+                                @Html.ActionLink("Comment", "Write", "Comment", new { id = item.articleId }, new { @class = "btn btn-secondary" } )
+                                @Html.ActionLink("List Comments", "ListNews", "Comment", new { id = item.articleId }, new { @class = "btn btn-secondary" } )
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

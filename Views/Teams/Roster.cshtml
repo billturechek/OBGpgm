@@ -1,0 +1,284 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using OBGpgm.Areas.Identity.Data
+@model List<Team>
+@inject SignInManager<ApplicationUser> signInManager;
+@{
+    ViewData["Title"] = "Team Rosters";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            $("#refresh").click(function () {
+                $("form").attr("action", "/Team/Roster");
+            });
+
+            $("#make").click(function () {
+                $("form").attr("action", "/Team/MakeSheet");
+            });
+        });
+
+
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Year"]");
+            $("span.id_200 select").val("@ViewData["Season"]");
+        });
+    </script>
+}
+<div class="container">
+    <h1>Team Rosters by Season</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+
+
+    <form asp-action="Roster" method="get">
+        <div class="form-actions no-color">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label class="col-form-label">Year </label>
+                    <span class="id_100">
+                        <select asp-items="@ViewBag.Years" id="Year" name="Year"
+                            onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <label class="col-form-label">Season</label>
+                    <span class="id_200">
+                        <select asp-items="@ViewBag.Seasons" id="Season" name="Season"
+                            onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Select season</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <input id="btnSubmit" type="submit" value="Refresh" class="btn btn-primary" hidden />                    
+                    @if (User.IsInRole("Admin"))
+                    {  
+                        <button class="btn btn-info" 
+                            name="make"
+                            type="submit"
+                            asp-controller="Teams"
+                            asp-action="MakeSheet" >Make Sheet
+                        </button>
+                    }
+                </div>                
+            </div>            
+        </div>
+    </form>
+
+    <h3 class="text-center">OBG Roster @ViewBag.SeasonName - @ViewBag.Year</h3>
+
+</div>
+
+<div class="container">
+    <table class="table">
+        @for (int i = 0; i < Model.Count(); i = i + 3)
+        {
+            <tr class="fw-bold">   
+                @if ( i < Model.Count())
+                {
+                    Team item = Model.ElementAt(i);
+                    <td colspan="2" style="text-align:center; font-size:larger;">
+                        @Html.DisplayFor(modelItem => item.TeamNumber) -
+                        @Html.DisplayFor(modelItem => item.TeamName)
+                    </td>
+                }
+                @if ((i + 1) < Model.Count())
+                {
+                    Team item2 = Model.ElementAt(i + 1);
+                    <td colspan="2" style="text-align:center; font-size:larger;">
+                        @Html.DisplayFor(modelItem => item2.TeamNumber) -
+                        @Html.DisplayFor(modelItem => item2.TeamName)
+                    </td>
+                }
+                @if ((i + 2) < Model.Count())
+                {
+                    Team item3 = Model.ElementAt(i + 2);
+                    <td colspan="2" style="text-align:center; font-size:larger;">
+                        @Html.DisplayFor(modelItem => item3.TeamNumber) -
+                        @Html.DisplayFor(modelItem => item3.TeamName)
+                    </td>
+                }
+            </tr>
+
+            <tr class="fw-bold">
+                @foreach (Player captain in ViewBag.Captains)
+                {
+                    Team item = Model.ElementAt(i);
+                    @if (captain.TeamId == item.TeamId)
+                    {
+                        @foreach (Member m in ViewBag.Members)
+                        {
+                            @if (captain.MemberId == m.MemberId)
+                            {
+                                <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">
+                                    @if (m.PortraitId != null && m.PortraitId > 0)
+                                    {
+                                        <a asp-controller="Portraits" asp-action="Show" asp-route-id="@m.PortraitId" />
+                                    }
+                                    @m.FullName
+                                </td>
+                                <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">@m.Telephone</td>
+                            }
+                        }
+                    }
+                }
+                @if ((i + 1) < Model.Count())
+                {
+                    Team item2 = Model.ElementAt(i + 1);
+                    @foreach (Player captain2 in ViewBag.Captains)
+                    {
+                        @if (captain2.TeamId == item2.TeamId)
+                        {
+                            @foreach (Member m in ViewBag.Members)
+                            {
+                                @if (captain2.MemberId == m.MemberId)
+                                {
+                                    <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">
+                                        @if (m.PortraitId != null && m.PortraitId > 0)
+                                        {
+                                            <a asp-controller="Portraits" asp-action="Show" asp-route-id="@m.PortraitId" />
+                                        }
+                                        @m.FullName
+                                        </td>
+                                    <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">@m.Telephone</td>
+                                }
+                            }
+                        }
+                    }
+                }
+                @if ((i + 2) < Model.Count())
+                {
+                    Team item3 = Model.ElementAt(i + 2);
+                    @foreach (Player captain3 in ViewBag.Captains)
+                    {
+                        @if (captain3.TeamId == item3.TeamId)
+                        {
+                            @foreach (Member m in ViewBag.Members)
+                            {
+                                @if (captain3.MemberId == m.MemberId)
+                                {
+                                    <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">
+                                        @if (m.PortraitId != null && m.PortraitId > 0)
+                                        {
+                                            <a asp-controller="Portraits" asp-action="Show" asp-route-id="@m.PortraitId" />
+                                        }
+                                        @m.FullName
+                                        </td>
+                                    <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">@m.Telephone</td>
+                                }
+                            }
+                        }
+                    }
+                }
+            </tr>
+
+            @for (int j = 0; j < 3; j++)
+            { 
+                <tr>
+                    @{int k = 0;
+                    }
+                    @foreach (Player p in ViewBag.Players)
+                    {
+                        Team item = Model.ElementAt(i);
+                        @if (p.TeamId == item.TeamId)
+                        {
+                            @if (j == k)
+                            {
+                                @foreach (Member m in ViewBag.Members)
+                                {
+                                    @if (p.MemberId == m.MemberId)
+                                    {
+                                        <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">
+                                            @if (m.PortraitId != null && m.PortraitId > 0)
+                                            {
+                                                <a asp-controller="Portraits" asp-action="Show" asp-route-id="@m.PortraitId" />
+                                            }
+                                            @m.FullName
+                                            </td>
+                                        <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">@m.Telephone</td>
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                            k++;
+                        }
+                    }
+
+                    @if ((i + 1) < Model.Count())
+                    {
+                        Team item2 = Model.ElementAt(i + 1);
+                        k = 0;
+                        @foreach (Player p2 in ViewBag.Players)
+                        {
+                            @if (p2.TeamId == item2.TeamId)
+                            {
+                                @if (j == k)
+                                {
+                                    @foreach (Member m in ViewBag.Members)
+                                    {
+                                        @if (p2.MemberId == m.MemberId)
+                                        {
+                                            <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">
+                                                @if (m.PortraitId != null && m.PortraitId > 0)
+                                                {
+                                                    <a asp-controller="Portraits" asp-action="Show" asp-route-id="@m.PortraitId" />
+                                                }
+                                                @m.FullName
+                                                </td>
+                                            <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">@m.Telephone</td>
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                                k++;
+                            }
+                        }
+                    }
+                    @if ((i + 2) < Model.Count())
+                    {
+                        Team item3 = Model.ElementAt(i + 2);
+                        k = 0;
+                        @foreach (Player p3 in ViewBag.Players)
+                        {
+                            @if (p3.TeamId == item3.TeamId)
+                            {
+                                @if (j == k)
+                                {
+                                    @foreach (Member m in ViewBag.Members)
+                                    {
+                                        @if (p3.MemberId == m.MemberId)
+                                        {
+                                            <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">
+                                                @if (m.PortraitId != null && m.PortraitId > 0)
+                                                {
+                                                    <a asp-controller="Portraits" asp-action="Show" asp-route-id="@m.PortraitId" />
+                                                }
+                                                @m.FullName
+                                                </td>
+                                            <td class="@(m.IsDeceased  ? "table-secondary" : string.Empty)">@m.Telephone</td>
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                                k++;
+                            }
+                        }
+                    }        
+                </tr>            
+            }
+        }
+
+    </table>
+
+
+
+    
+
+</div>

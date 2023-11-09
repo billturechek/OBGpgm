@@ -1,0 +1,332 @@
+﻿@model OBGpgm.Models.MemberViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var returnPage = Convert.ToInt32(ViewBag.returnPage);
+}
+<div class="container">
+
+<h1>Edit</h1>
+<h3 class="message text-success">@ViewBag.Message</h3>
+<h4>Member</h4>
+<hr />
+    <form asp-action="Edit">
+        <div class="form-group row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Member.MemberId" />
+            <div class="form-group col-md-4">
+                <label asp-for="Member.FirstName" class="display-label"></label>
+                <input asp-for="Member.FirstName" class="display-field" />
+                <span asp-validation-for="Member.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Member.LastName" class="display-label"></label>
+                <input asp-for="Member.LastName" class="display-field" />
+                <span asp-validation-for="Member.LastName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-4">
+                <label asp-for="Member.Address1" class="display-label">House number</label>
+                <input asp-for="Member.Address1" class="display-field" />
+                <span asp-validation-for="Member.Address1" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group col-md-3">
+                <label asp-for="streetName" class="display-label">Street</label>
+                <select asp-for="streetName" asp-items="@ViewBag.VillagesStreets" class="display-field">
+                    <option value="">Please select</option>
+                </select>
+
+                <span asp-validation-for="streetName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Member.Zip" class="display-label"></label>
+                <select asp-for="Member.Zip" data-val="true" class="display-field" id="Zip" name="Zip">
+                    <option value="">Pick one</option>
+                    <option value="32159">32159</option>
+                    <option value="32162">32162</option>
+                    <option value="32163">32163</option>
+                </select>
+                <span asp-validation-for="Member.Zip" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-4">
+                <label asp-for="Member.Telephone" class="display-label"></label>
+                <input asp-for="Member.Telephone" class="display-field" />
+                <span asp-validation-for="Member.Telephone" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Member.Cellphone" class="display-label"></label>
+                <input asp-for="Member.Cellphone" class="display-field" />
+                <span asp-validation-for="Member.Cellphone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-4">
+                <label asp-for="Member.VillageId" class="display-label"></label>
+                <input asp-for="Member.VillageId" class="display-field" />
+                <span asp-validation-for="Member.VillageId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Member.Village" class="display-label"></label>
+                <select asp-for="Member.Village" asp-items="@ViewBag.Villages" class="display-field">
+                    <option value="">Please select</option>
+                </select>
+                <span asp-validation-for="Member.Village" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-4">
+                <label asp-for="Member.CurrentPlayerId" class="display-label"></label>
+                <input asp-for="Member.CurrentPlayerId" class="display-field" />
+                <span asp-validation-for="Member.CurrentPlayerId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Member.TeamNameIfCaptain" class="display-label"></label>
+                <input asp-for="Member.TeamNameIfCaptain" class="display-field" />
+                <span asp-validation-for="Member.TeamNameIfCaptain" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Member.Email" class="display-label"></label>
+                <input asp-for="Member.Email" class="display-field" />
+                <span asp-validation-for="Member.Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-3">
+                <label asp-for="Member.Bday" class="display-label"></label>
+                <input asp-for="Member.Bday" class="display-field" />
+                <span asp-validation-for="Member.Bday" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="display-label">
+                    <input class="display-field" asp-for="Member.IsPrivate" value="false" /> 
+                        @Html.DisplayNameFor(model => model.Member.IsPrivate)
+                </label>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Member.CurrentSignUpDate" class="display-label"></label>
+                <input asp-for="Member.CurrentSignUpDate" class="display-field" />
+                <span asp-validation-for="Member.CurrentSignUpDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <p></p>
+        </div>
+        <div class="form-group row">
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.HasPaidAnnualDues" value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.HasPaidAnnualDues)
+                </label>
+            </div>
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.HasPaidSessionPrizeFund" value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.HasPaidSessionPrizeFund)
+                </label>
+            </div>
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.GetsPrize" value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.GetsPrize)
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.WillPlayNextSession" value="true" checked="checked"/>   
+                        @Html.DisplayNameFor(model => model.Member.WillPlayNextSession)
+                </label>
+            </div>
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.WillCaptainNextSession" value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.WillCaptainNextSession)
+                </label>
+            </div>
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.WillCaptainIfNeeded"  value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.WillCaptainIfNeeded)
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.IsActive" value="true" checked="checked"/> 
+                        @Html.DisplayNameFor(model => model.Member.IsActive)
+                </label>
+            </div>
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.IsVerified" value="true" checked="checked"/> 
+                        @Html.DisplayNameFor(model => model.Member.IsVerified)
+                </label>
+            </div>
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.IsHonored" value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.IsHonored)
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.IsJabba" value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.IsJabba)
+                </label>
+            </div>
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.IsAdministrator" value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.IsAdministrator)
+                </label>
+            </div>
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.IsDeceased" value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.IsDeceased)
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.WantsNoPicture" value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.WantsNoPicture)
+                </label>
+            </div>
+            <div class="form-group form-check col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Member.Snowbird" value="false"/> 
+                        @Html.DisplayNameFor(model => model.Member.Snowbird)
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-4">
+                <label asp-for="Member.Military" class="display-label"></label>
+                <select asp-for="Member.Military" data-val="true" class="display-field" id="Military" name="Military">
+                    <option value="">Pick one</option>
+                    <option value="No">No</option>
+                    <option value="Air Force">Air Force</option>
+                    <option value="Army">Army</option>
+                    <option value="Army Reserve">Army Reserve</option>
+                    <option value="Coast Guard">Coast Guard</option>
+                    <option value="Marine Corps">Marine Corps</option>
+                    <option value="Merchant Marines">Merchant Marines</option>
+                    <option value="National Guard">National Guard</option>
+                    <option value="Navy">Navy</option>
+                    <option value="UK Army">UK Army</option>
+                </select>
+                <span asp-validation-for="Member.Military" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Member.YearsMilitary" class="display-label">Years of Military Service</label>
+                <input asp-for="Member.YearsMilitary" class="display-field" value="" />
+                <span asp-validation-for="Member.YearsMilitary" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-4">
+                <label asp-for="Member.Hometown" class="display-label">Home Town</label>
+                <input asp-for="Member.Hometown" class="display-field" />
+                <span asp-validation-for="Member.Hometown" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="hState" class="display-label">Home town's State</label>
+                <select asp-for="hState" asp-items="@ViewBag.States" class="display-field">
+                    <option value="">Please select</option>
+                </select>
+                <span asp-validation-for="hState" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-4">
+                <label asp-for="Member.MovedFrom" class="display-label">Moved from City</label>
+                <input asp-for="Member.MovedFrom" class="display-field" />
+                <span asp-validation-for="Member.MovedFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="fState" class="display-label">Moved from State</label>
+                <select asp-for="fState" asp-items="@ViewBag.States" class="display-field">
+                    <option value="">Please select</option>
+                </select>
+                <span asp-validation-for="fState" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Member.YearMoved" class="display-label">Year moved to The Villages</label>
+                <input asp-for="Member.YearMoved" class="display-field" />
+                <span asp-validation-for="Member.YearMoved" class="text-danger"></span>
+            </div>
+            @*
+            <div class="form-group col-md-6">
+                <label asp-for="ImageId" class="control-label"></label>
+                <input asp-for="ImageId" class="form-control" />
+                <span asp-validation-for="ImageId" class="text-danger"></span>
+            </div>
+            *@
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-4">
+                <label asp-for="Member.Job" class="display-label"></label>
+                <input asp-for="Member.Job" class="display-field" />
+                <span asp-validation-for="Member.Job" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-8">
+                <label asp-for="Member.Interests" class="display-label"></label>
+                <input asp-for="Member.Interests" class="display-field"/>
+                <span asp-validation-for="Member.Interests" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-3">
+                <label asp-for="Member.Wife" class="display-label"></label>
+                <input asp-for="Member.Wife" class="display-field" />
+                <span asp-validation-for="Member.Wife" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="Member.Children" class="display-label"></label>
+                <input asp-for="Member.Children" class="display-field" />
+                <span asp-validation-for="Member.Children" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="Member.Grand" class="display-label"></label>
+                <input asp-for="Member.Grand" class="display-field" />
+                <span asp-validation-for="Member.Grand" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="Member.Great" class="display-label"></label>
+                <input asp-for="Member.Great" class="display-field" />
+                <span asp-validation-for="Member.Great" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <p></p>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+    
+</div>
+
+<div>
+    <a asp-action="Index" asp-route-pg="@returnPage">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - bootNav</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/bootNav.styles.css" asp-append-version="true" />
+    <style type="text/css">
+        .dropdown-menu li{
+            position: relative;
+        }    
+        .dropdown-menu .submenu{
+            display:none;
+            position:absolute;
+            left:100%;
+            top:7px;
+        }
+        .dropdown-menu>li:hover>.submenu{
+            display:block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">bootNav</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">More</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" class="dropdown-item">Item 1</a></li>
+                                <li class="dropend">                                    
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Item 2</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a href="#" class="dropdown-item">SubItem 1</a></li>
+                                        <li>
+                                            <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                               href="#" data-bs-auto-close="outside">SubItem 2</a>
+                                            <ul class="dropdown-menu submenu">
+                                                <li><a href="#" class="dropdown-item">MultiLevel 1</a></li>
+                                                <li><a href="#" class="dropdown-item">MultiLevel 2</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="#" class="dropdown-item">SubItem 3</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#" class="dropdown-item">Item 3</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - bootNav - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,34 @@
+﻿@using OBGpgm.Models
+@model List<FileModel>
+
+@{    
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <table class="table table-striped table-hover table-bordered table-sm border-primary">
+        <tr class="table-dark">
+            <th>File Name</th>
+            <th>Action</th>
+        </tr>
+        @foreach (FileModel file in Model)
+        {
+            <tr>
+                <td class="table-info">@file.FileName</td>
+                <td>
+                    <button type="button" class="btn btn-outline-primary" 
+                        onclick="location.href='@Url.Action("DownloadFile", "Home", new { fileName = file.FileName })'">
+                        Download
+                    </button>
+                </td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

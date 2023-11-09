@@ -1,0 +1,131 @@
+﻿@model OBGpgm.Models.Article
+
+@inject SignInManager<ApplicationUser> signInManager;
+@{
+    ViewData["Title"] = "Insert Article";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    <script>
+        window.onload = function () {
+            var published = document.getElementById("published");
+            var div = document.getElementById("addButton");
+            if (published.checked == true) {
+                div.style.display = "block";
+            }
+            else {
+                div.style.display = "block";
+            }
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<div class="container">
+    <h1>Insert New Article</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <h4>Article</h4>
+    <hr />
+    <form asp-action="Insert">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input asp-for="articleId" type="hidden" class="form-control" readonly="readonly" />
+                <input asp-for="authId" class="form-control" type="hidden" />
+                <input asp-for="category" class="form-control" type="hidden" readonly="readonly" />
+                <div class="form-group">
+                    <h4><label asp-for="authId" class="control-label"></label></h4>
+                    <span asp-validation-for="authId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <div id="addButton" class="form-group">
+                    <h4><label class="control-label">Add photos below:</label></h4>
+                    <a class="btn btn-primary" asp-route-id="@Model.articleId"
+                       asp-controller="Photos" asp-action="Upload">Upload Photo</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <h4><label asp-for="category" class="control-label"></label></h4>
+                @if (User.IsInRole("Admin"))
+                {
+                    <select asp-for="category" asp-items="Html.GetEnumSelectList<articleCategory>()" class="form-control">
+                        <option selected="selected" value="">Please select</option>
+                    </select>
+                }
+                else
+                {
+                    <input asp-for="category" class="form-control" readonly="readonly" />
+                }
+                <span asp-validation-for="category" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <h4><label asp-for="topic" class="control-label"></label></h4>
+                <select asp-for="topic" asp-items="Html.GetEnumSelectList<articleTopic>()" class="form-control">
+                    <option selected="selected" value="">Please select</option>
+                </select>
+                <span asp-validation-for="topic" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <h4><label asp-for="title" class="control-label"></label></h4>
+                <input asp-for="title" class="form-control" />
+                <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <h4><label asp-for="slug" class="control-label"></label></h4>
+                @Html.TextAreaFor(e => e.slug, 5, 55, null)
+                <span asp-validation-for="slug" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <div class="form-group">
+                    <h4><label asp-for="itemBody" class="control-label"></label></h4>
+                    @Html.TextAreaFor(e => e.itemBody, 10, 55, null)
+                    <span asp-validation-for="itemBody" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="topItem" value="false" />
+                    <strong>@Html.DisplayNameFor(model => model.topItem)</strong>
+                </label>
+                <span asp-validation-for="topItem" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="form-check-label">
+                    <input id="published" class="form-check-input" asp-for="isPublished" value="false" />
+                    <strong>@Html.DisplayNameFor(model => model.isPublished)</strong>
+                </label>
+                <span asp-validation-for="isPublished" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <h4><label asp-for="pubDate" class="control-label"></label></h4>
+                <input asp-for="pubDate" class="form-control" readonly="readonly" />
+                <span asp-validation-for="pubDate" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <h4><label asp-for="lastModified" class="control-label"></label></h4>
+                <input asp-for="lastModified" class="form-control" readonly="readonly" />
+                <span asp-validation-for="lastModified" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input type="submit" value="Insert" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="List">Back to List</a>
+    </div>
+</div>
+

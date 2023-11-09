@@ -1,0 +1,155 @@
+﻿@model IEnumerable<OBGpgm.Models.Shark>
+
+@{
+    ViewData["Title"] = "List Sharks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @section Scripts{
+        <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Year"]");
+            $("span.id_200 select").val("@ViewData["Season"]");
+        });
+        </script>
+    }}
+
+<div class="container">
+    <h1>List Sharks by Season</h1>
+
+    <form asp-action="List" method="get">
+        <div class="form-actions no-color">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label class="col-form-label">Year </label>
+                    <span class="id_100">
+                        <select asp-items="@ViewBag.Years" id="Year" name="Year"
+                                onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <label class="col-form-label">Season</label>
+                    <span class="id_200">
+                        <select asp-items="@ViewBag.Seasons" id="Season" name="Season"
+                                onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Select season</option>
+                        </select>
+                    </span>
+                    <input id="btnSubmit" type="submit" value="Refresh" class="btn btn-primary" hidden />
+                </div>
+                <div class="col-sm-2">                    
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <button class="btn btn-info"
+                            name="make"
+                            type="submit"
+                            asp-controller="Sharks"
+                            asp-action="MakeSheet">
+                            Make Sheet
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.SessionId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SharkDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SharkType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Points)
+                </th>
+                <th>
+                    Member Name
+                </th>
+                <th>
+                    Team Name
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="@(item.Player.Member.IsDeceased  ? "table-secondary" : string.Empty) ">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SessionId)
+                    </td>
+                    <td>
+                        @{
+                            string shkDate;
+                            shkDate = item.SharkDate.ToShortDateString();
+                            @(shkDate)
+                        }
+                    </td>
+                    <td>
+                        @foreach (SharkType i in Enum.GetValues(typeof(SharkType)))
+                        {
+                            string thisShark = "";
+                            if (i == item.SharkType)
+                            {
+                                thisShark = Enum.GetName(typeof(SharkType), i);
+                                @(thisShark)
+                                break;
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Points)
+                    </td>
+                    <td>
+                        @foreach (var mem in ViewBag.MemberId)
+                        {
+                            string thisMem = "";
+                            if (item.MemberId.ToString() == mem.Value)
+                            {
+                                thisMem = mem.Text;
+                                @(thisMem)
+                                break;
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Player.Team.TeamName)
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            if (item.Player.Member.PortraitId != null && item.Player.Member.PortraitId > 0)
+                            {
+                                <a asp-action="Show" asp-controller="Portraits" asp-route-id="@item.Player.Member.PortraitId">View | </a>
+                            }
+                            else
+                            {
+                                <a asp-action="Details" asp-route-id="@item.SharkId">View | </a>
+                            }
+                            <a asp-action="Edit" asp-route-id="@item.SharkId">Update | </a>
+                            <a asp-action="Delete" asp-route-id="@item.SharkId">Delete</a>
+                        }
+                        else
+                        {
+                            if (item.Player.Member.PortraitId != null && item.Player.Member.PortraitId > 0)
+                            {
+                                <a asp-action="Show" asp-controller="Portraits" asp-route-id="@item.Player.Member.PortraitId">View</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Details" asp-route-id="@item.SharkId">View</a>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

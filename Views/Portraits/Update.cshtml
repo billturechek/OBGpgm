@@ -1,0 +1,61 @@
+﻿@model Portrait
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+
+    <h1>Edit</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+
+    <h4>Image of @Model.Member.FirstName</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Update" method="post"
+                  enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="LargeImage" />
+                <input type="hidden" asp-for="ThumbImage" />
+                <input type="hidden" asp-for="Memberid" />
+                <div class="form-group">
+                    <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ThumbImage)" />
+                    <label><strong>Member photographs are updated from the List Images page</strong></label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Member.FirstName" class="control-label"></label>
+                    <input asp-for="Member.FirstName" class="form-control" />
+                    <span asp-validation-for="Member.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Member.LastName" class="control-label"></label>
+                    <input asp-for="Member.LastName" class="form-control" />
+                    <span asp-validation-for="Member.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Notes" class="control-label"></label>
+                    <input asp-for="Notes" class="form-control" />
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="List">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>

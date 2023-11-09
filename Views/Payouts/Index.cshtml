@@ -1,0 +1,99 @@
+﻿@model IEnumerable<OBGpgm.Models.Payout>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Players)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CaptainId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Player1Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Player2Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Player3Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Player4Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPayout)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Individual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Session)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Team)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Players)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CaptainId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player1Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player2Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player3Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player4Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPayout)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Individual)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Session.SessionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Team.TeamId)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.PayoutId" asp-route-pg="@pager.CurrentPage">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.PayoutId" asp-route-pg="@pager.CurrentPage">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PayoutId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<partial name="_pager" model="@pager" />

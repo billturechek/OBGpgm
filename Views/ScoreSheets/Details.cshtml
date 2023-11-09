@@ -1,0 +1,56 @@
+﻿
+@model OBGpgm.Models.ScoreSheet
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var returnPage = Convert.ToInt32(ViewBag.returnPage);
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>ScoreSheet</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SsDivision)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SsDivision)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SsVteam)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SsVteam)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SsHpoints)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SsHpoints)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SsVpoints)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SsVpoints)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SsDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SsDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SsSession)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SsSessionId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" asp-route-pg="@returnPage">Back to List</a>
+</div>

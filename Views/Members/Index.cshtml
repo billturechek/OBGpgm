@@ -1,0 +1,313 @@
+﻿@model IEnumerable<OBGpgm.Models.Member>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if(ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Insert">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telephone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cellphone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            @*
+            <th>
+                @Html.DisplayNameFor(model => model.Address1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Zip)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VillageId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Office)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentPlayerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Evaluation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShirtSize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPrivate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentSignUpDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PassWord)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasPaidAnnualDues)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasPaidSessionPrizeFund)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsVerified)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WillPlayNextSession)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsJabba)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAdministrator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsHonored)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDeceased)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GetsPrize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WillCaptainNextSession)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WillCaptainIfNeeded)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamNameIfCaptain)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Village)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hometown)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MovedFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Wife)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.YearMoved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Children)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Grand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Great)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Job)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Interests)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Military)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.YearsMilitary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WantsNoPicture)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Snowbird)
+            </th>
+            *@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telephone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cellphone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            @*
+            <td>
+                @Html.DisplayFor(modelItem => item.Address1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Zip)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VillageId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Office)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentPlayerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Evaluation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShirtSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPrivate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentSignUpDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PassWord)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HasPaidAnnualDues)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HasPaidSessionPrizeFund)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsVerified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WillPlayNextSession)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsJabba)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAdministrator)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsHonored)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDeceased)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GetsPrize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WillCaptainNextSession)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WillCaptainIfNeeded)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamNameIfCaptain)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Village)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hometown)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MovedFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Wife)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YearMoved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Children)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Grand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Great)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Job)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Interests)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Military)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YearsMilitary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WantsNoPicture)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Snowbird)
+            </td>
+            *@
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MemberId" asp-route-pg="@pager.CurrentPage">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MemberId" asp-route-pg="@pager.CurrentPage">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<partial name="_pager" model="@pager" />

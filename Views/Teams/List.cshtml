@@ -1,0 +1,153 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using OBGpgm.Areas.Identity.Data
+
+@*model List<Team> *@
+@model IEnumerable<Team>
+@inject SignInManager<ApplicationUser> signInManager;
+@{
+    ViewData["Title"] = "List Teams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Year"]");
+            $("span.id_200 select").val("@ViewData["Season"]");
+        });
+    </script>
+}
+
+<div class="container">
+    <h1>Season Standings</h1>
+    <form asp-action="List" method="get">
+        <div class="form-actions no-color"> 
+            <div class="row">
+                <div class="col-sm-2">
+                    <label class="col-form-label">Year </label>
+                    <span class="id_100">
+                        <select asp-items="@ViewBag.Years" id="Year" name="Year"
+                                onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <label class="col-form-label">Season</label>
+                    <span class="id_200">
+                        <select asp-items="@ViewBag.Seasons" id="Season" name="Season" 
+                            onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Select season</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <input id="btnSubmit" type="submit" value="Refresh" class="btn btn-primary" hidden/> 
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <button class="btn btn-info"
+                        name="make"
+                        type="submit"
+                        asp-controller="Teams"
+                        asp-action="MakeStandings" >
+                            Make Standings
+                        </button>
+                    }
+                </div>
+                <div class="col-sm-2">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <button class="btn btn-info"
+                            name="weekly"
+                            type="submit"
+                            asp-controller="Teams"
+                            asp-action="MakeWeeklyResults">
+                            Make Weekly
+                        </button>
+                    }
+                    
+                </div>     
+            </div>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Place
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TeamPoints)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TeamNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TeamName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsChampion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsRunnerUp)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SessionId)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int counter = 0;
+                int place = 1;
+                int prev = 0;
+                string cPlace = "";
+                foreach (var item in Model)
+                {
+                    // This will compute & display team place only when the
+                    // sort order is descending by team points
+                    if (ViewBag.sortOrder == null)
+                    {
+                        counter++;
+                        if (!(item.TeamPoints == prev))
+                        {
+                            place = counter;
+                            prev = item.TeamPoints;
+                        }
+                        cPlace = place.ToString();
+                    }
+
+                    <tr>
+                        <td>
+                            @cPlace
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TeamPoints)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TeamNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TeamName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsChampion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsRunnerUp)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SessionId)
+                        </td>
+                        <td>
+                            <a asp-action="TeamRoster" asp-controller="Players" asp-route-id="@item.TeamId">Roster</a> |
+                            <a asp-action="Get" asp-route-id="@item.TeamId">View</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

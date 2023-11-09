@@ -1,0 +1,101 @@
+﻿
+@model OBGpgm.Models.ScoreSheet
+@{
+    @* ViewData["Title"] = "Create Score Sheets"; *@
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["session"]");
+            $("span.id_200 select").val("@ViewData["numWeeks"]");
+            $("input#startDate").val("@ViewData["startDate"]");
+            $("input#skipDate").val("@ViewData["skipDate"]");
+            $("input#skipList").val("@ViewBag.skipList");
+        })
+
+
+    </script>
+}
+<div class="container">
+    <h1>Create Score Sheets</h1>    `
+
+    <h3 class="message text-success">@TempData["Message"]</h3>
+
+    <form asp-controller="ScoreSheets" asp-action="Create" method="post">
+        <div class="form-actions no-color">
+            <div class="form-row">
+                <div class="form-group col-sm-4">
+                    <label class="col-form-label" style="text-align: right">Session</label>
+                    <span class="id_100">
+                        <select asp-items="@ViewBag.SessionId" id="session" name="session" class="col-sm-4">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+                </div>
+
+
+
+                <div class="form-group col-sm-4">
+                    <label class="col-sm-5 col-form-label"
+                           style="text-align:right">Weeks to play</label>
+                    <span class="id_200">
+                        <select id="numWeeks" name="numWeeks" class="col-sm-5">
+                            <option value="">Select weeks</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </span>
+                </div>
+
+
+                <div class="form-group col-sm-4">
+                    <span class="id_300">
+                        <label class="col-form-label">Start Date</label>
+                        <input id="startDate" name="startDate" type="date" class="col-sm-6" />
+                    </span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-4">
+                    <span class="id_400">
+                        <label class="col-form-label">Skip Date</label>
+                        <input id="skipDate" name="skipDate" type="date" class="col-sm-6" />
+                    </span>
+                </div>
+                <div class="form-group col-sm-2">
+                    <div class="form-row">
+                        <input type="submit" name="submit" value="Add" class="btn btn-primary" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <input hidden="hidden" id="skipList" name="skipList" />
+                    <label class="col-form-label">Skip List</label>
+                    @if (ViewBag.skipList != null)
+                    {
+                        List<string> slist = (@ViewBag.skipList);
+                        @foreach (string item in slist)
+                        {
+                            <div>@item</div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-row">
+                <input type="submit" name="submit" value="Create" class="btn btn-primary" /> |
+                <a asp-action="Create">Session Archives</a>
+            </div>
+        </div>
+    </form>
+</div>

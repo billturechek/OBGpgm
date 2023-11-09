@@ -1,0 +1,171 @@
+﻿@model List<ScoreSheet>
+
+@{
+    ViewData["Title"] = "Enter Scores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("select#thisSession").val("@ViewData["thisSession"]");
+            $("select#curWeek").val("@ViewData["curWeek"]");
+            //debugger;
+
+        });
+
+        function DoUpdate(hp) {
+            // hp is node of <select> for home team
+            // parent is node of <div> for home select
+            var parent = hp.parentNode;
+
+            // grandDad is node of <div> for group
+            var grandDad = parent.parentNode;
+
+            // mod is node of <div> for row
+            var mod = grandDad.parentNode;
+
+            // all is node of <div> for container
+            var all = mod.parentNode;
+
+            // vp is node of <select> for visitor
+            var vp = grandDad.querySelector('select.visitor');
+            var option = hp.options[hp.selectedIndex];
+            if (option.value != "Enter score") {
+                $(vp).find('option:not(:first)')
+                    .remove();
+                vp.classList.add('done');
+                var vCount = 17 - option.value;
+                for (var i = 0; i < vCount; i++) {
+                    var opt = document.createElement('option');
+                    opt.value = i.toString();
+                    opt.text = i.toString();
+                    if (i == (vCount - 1)) {
+                        opt.selected = true;
+                    }
+                    vp.add(opt, null);
+                }
+                vp.disabled = null;
+            }
+            //debugger;
+            // enable enter button when all scores entered
+            var visitors = all.querySelectorAll('select.visitor');
+            var done = all.querySelectorAll('select.done');
+            if (done.length == visitors.length) {
+                var enter = document.getElementById("submit");
+                enter.disabled = null;
+            }
+        }
+
+    </script>
+}
+<div class="container">
+    <h1>Enter Scores</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <form name="form2" asp-controller="ScoreSheets" asp-action="Enter" method="post">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"><h5 class="control-label">Session</h5></th>
+                    <th scope="col"><h5 class="control-label">Date</h5></th>
+                    <th scope="col"><h5 class="control-label">Home Team</h5></th>
+                    <th scope="col"><h5 class="control-label">Captain</h5></th>
+                    <th scope="col"><h5 class="control-label">Score</h5></th>
+                        <th scope="col"><h5 class="control-label">Visitor</h5></th>
+                        <th scope="col"><h5 class="control-label">Captain</h5></th>
+                    <th scope="col"><h5 class="control-label">Score</h5></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(m => m[i].SsSessionId)
+                            <input type="hidden" asp-for="@Model[i].SsSessionId" />
+                        </td>
+                        <td>
+                            @Convert.ToDateTime(Model[i].SsDate).ToString("MM/dd/yyyy")
+                            <input type="hidden" asp-for="@Model[i].SsDate" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => m[i].SsHteam)
+                            <input type="hidden" asp-for="@Model[i].SsHteam" />
+                        </td>
+                        <td>
+                            @{
+                                foreach (Player c in ViewBag.Captains){
+                                    if (Model[i].SsHteam == c.Team.TeamNumber){
+                                        string capt = c.Member.LastName;
+                                        @(capt)
+                                        break;
+                                    }
+                                }
+                            } 
+                        </td>
+                        <td>
+                            <select name="@Html.NameFor(m => m[i].SsHpoints)"
+                                class="home"
+                                onchange="DoUpdate(this)"
+                                asp-for="@Model[i].SsHpoints">
+                                <option value="0">Enter score</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                            </select>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => m[i].SsVteam)
+                            <input type="hidden" asp-for="@Model[i].SsVteam" />
+                        </td>
+                        <td>
+                            @{
+                                foreach (Player c in ViewBag.Captains)
+                                {
+                                    if (Model[i].SsVteam == c.Team.TeamNumber)
+                                    {
+                                        string capt = c.Member.LastName;
+                                        @(capt)
+                                        break;
+                                    }
+                                }
+                            }
+                        </td>
+                        <td>
+                            <select name="@Html.NameFor(m => m[i].SsVpoints)"
+                                class="visitor"
+                                disabled="disabled"
+                                asp-for="@Model[i].SsVpoints">
+                                <option value="">Enter score</option>
+                            </select>
+                            <input type="hidden" asp-for="@Model[i].SsDivision" />
+                            <input type="hidden" asp-for="@Model[i].SsWeek" />
+                        </td>
+                    </tr>                    
+                }                     
+            </tbody>
+        </table>
+        
+        <div class="form-row row">
+            <div class="col-2">
+                <input type="submit" id="submit" name="submit"
+                        disabled="disabled" method="post"
+                        value="Enter" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,145 @@
+﻿@model IEnumerable<OBGpgm.Models.Session>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SessionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Season)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamsD1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamsD2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentWeek)
+            </th>
+            @*
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentSeason)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.President)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VicePresident)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Secretary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Treasurer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecondVp1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecondVp2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecondVp3)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecondVp4)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DraftType)
+            </th>
+            <th></th>
+            *@
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SessionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Season)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamsD1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamsD2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentWeek)
+            </td>
+                @*
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentSeason)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.President)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VicePresident)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Secretary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Treasurer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondVp1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondVp2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondVp3)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondVp4)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DraftType)
+            </td>
+            *@
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SessionId" asp-route-pg="@pager.CurrentPage">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SessionId" asp-route-pg="@pager.CurrentPage">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SessionId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<partial name="_pager" model="@pager" />

@@ -1,0 +1,73 @@
+﻿@model OBGpgm.Models.Draft
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Draft</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DraftType" class="control-label"></label>
+                <input asp-for="DraftType" class="form-control" />
+                <span asp-validation-for="DraftType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DraftSessionId" class="control-label"></label>
+                <select asp-for="DraftSessionId" class ="form-control" asp-items="ViewBag.DraftSessionId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DraftTeamId" class="control-label"></label>
+                <input asp-for="DraftTeamId" class="form-control" />
+                <span asp-validation-for="DraftTeamId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DraftPlayerId" class="control-label"></label>
+                <input asp-for="DraftPlayerId" class="form-control" />
+                <span asp-validation-for="DraftPlayerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DraftRound" class="control-label"></label>
+                <input asp-for="DraftRound" class="form-control" />
+                <span asp-validation-for="DraftRound" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DraftPosition" class="control-label"></label>
+                <input asp-for="DraftPosition" class="form-control" />
+                <span asp-validation-for="DraftPosition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DraftSelection" class="control-label"></label>
+                <input asp-for="DraftSelection" class="form-control" />
+                <span asp-validation-for="DraftSelection" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DraftDivision" class="control-label"></label>
+                <input asp-for="DraftDivision" class="form-control" />
+                <span asp-validation-for="DraftDivision" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="DraftPreDraft" /> @Html.DisplayNameFor(model => model.DraftPreDraft)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

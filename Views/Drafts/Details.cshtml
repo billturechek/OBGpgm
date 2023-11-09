@@ -1,0 +1,74 @@
+﻿@model OBGpgm.Models.Draft
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var returnPage = Convert.ToInt32(ViewBag.returnPage);
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Draft</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DraftType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DraftType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DraftTeamId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DraftTeamId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DraftPlayerId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DraftPlayerId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DraftRound)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DraftRound)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DraftPosition)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DraftPosition)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DraftSelection)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DraftSelection)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DraftDivision)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DraftDivision)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DraftPreDraft)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DraftPreDraft)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DraftSession)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DraftSession.SessionId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.DraftId" asp-route-pg="@returnPage">Edit</a> |
+    <a asp-action="Index" asp-route-pg="@returnPage">Back to List</a>
+</div>

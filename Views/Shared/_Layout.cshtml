@@ -1,0 +1,489 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - OBGpgm</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/OBGpgm.styles.css" asp-append-version="true" />
+    <style type="text/css">
+        .dropdown-menu li {
+            position: relative;
+        }
+        .dropdown-menu .submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 10px;
+        }
+        .dropdown-menu > li:hover > .submenu {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OBGpgm</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Seasons</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Players" asp-action="List">Members</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Players" asp-action="TeamRoster">Team Rosters</a>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Birthdays</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a class="dropdown-item" asp-controller="Players" 
+                                            asp-route-sort="Name" asp-action="ListBdays">Alphabetic</a>
+                                        </li>
+                                        <li><a class="dropdown-item" asp-controller="Players" 
+                                            asp-route-sort="Age" asp-action="ListBdays">Chronologic</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Sharks" asp-action="List">Sharks</a>
+                                </li>
+
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Standings</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a class="dropdown-item" asp-controller="Teams" asp-action="List">Current Standings</a></li>
+                                        <li><a class="dropdown-item" asp-controller="ScoreSheets" asp-action="List">Weekly Results</a></li>
+                                    </ul>
+                                </li>
+                                
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Teams</a>
+                                    <ul class="dropdown-menu submenu">  
+                                        <li><a class="dropdown-item" asp-controller="Teams" asp-action="List">Team List</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Teams" asp-action="Roster">OBG Roster</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Teams" asp-action="Accordian">Team Pictures</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">DownLoads</a>
+                            <ul class="dropdown-menu">
+
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Birthdays</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="Index2"
+                                               asp-route-report="Birthdays">Birthdays (pdf)</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="Index2"
+                                               asp-route-report="Birthdays" asp-route-format="xlsx">Birthdays (xlsx)</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Draft Order</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="DraftOrder">Draft Order (pdf)</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="DraftOrder" asp-route-format="xlsx">Draft Order (xlsx)</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Draft Pool</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="DraftPool">Draft Pool (pdf)</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="DraftPool" asp-route-format="xlsx">Draft Pool (xlsx)</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Members</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="Index2"
+                                               asp-route-report="Members">Members (pdf)</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="Index2"
+                                               asp-route-report="Members" asp-route-format="xlsx">Members (xlsx)</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Rosters</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="Rosters">Rosters (pdf)</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="Rosters" asp-route-format="xlsx">Rosters (xlsx)</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Schedules</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a class="dropdown-item" asp-controller="Home" 
+                                            asp-action="Index2">Schedules (pdf)</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Home" 
+                                            asp-action="Index2" asp-route-format="xlsx">Schedules (xlsx)</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Score Sheets</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="ScoreSheets">ScoreSheets (pdf)</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="ScoreSheets" asp-route-format="xlsx">Scoresheets (xlsx)</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Sharks</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="Sharks">Sharks (pdf)</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="Sharks" asp-route-format="xlsx">Sharks (xlsx)</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Standings</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="Standings">Standings (pdf)</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="Standings" asp-route-format="xlsx">Standings (xlsx)</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Team Schedules</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Home"
+                                               asp-route-report="TeamSchedules" 
+                                               asp-action="Index2">Team Schedules (pdf)</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Home"
+                                               asp-route-report="TeamSchedules" asp-action="Index2" 
+                                               asp-route-format="xlsx">Team Schedules (xlsx)</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropend">
+                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                       href="#" data-bs-auto-close="outside">Weekly</a>
+                                    <ul class="dropdown-menu submenu">
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="Weekly">Weekly Results (pdf)</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Index2" 
+                                            asp-route-report="Weekly" asp-route-format="xlsx">Weekly Results (xlsx)</a></li>
+                                    </ul>
+                                </li>
+
+
+                   
+
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="navbarDropdownMenuLink">
+                                News/Blogs
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-controller="Articles" 
+                                        asp-action="Scan" asp-route-category="1" 
+                                        asp-route-topic="1">Club Announcements</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-controller="Articles"
+                                       asp-action="Scan" asp-route-category="2"
+                                       asp-route-topic="1">Member News</a>
+                                </li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-controller="Articles"
+                                       asp-action="Write" asp-route-category="1"
+                                       asp-route-topic="1">Insert Club Announcement</a>
+                                    </li>
+                                }
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-controller="Articles"
+                                       asp-action="ListOpinion" asp-route-category="1"
+                                       asp-route-topic="2">Opinions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-controller="Articles"
+                                       asp-action="ListQuestion" asp-route-category="1"
+                                       asp-route-topic="3">Questions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-controller="Articles"
+                                       asp-action="ListLost" asp-route-category="1"
+                                       asp-route-topic="4">Lost/Found</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-controller="Articles"
+                                       asp-action="ListMy" asp-route-id="@ViewBag.thisMemberId">List my posts</a>
+                                </li>
+
+
+
+
+                            </ul>
+                        </li>
+
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">New Session</a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-controller="Sessions" asp-action="Insert">New Session</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-controller="Sessions" asp-action="Create">Create Draft</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-controller="Drafts" asp-action="AvailableList">Make Available List</a>
+                                </li>      
+                                <li><a class="dropdown-item" asp-controller="Drafts" asp-action="Enter">Enter Draft</a></li>     
+                                <li><a class="dropdown-item" asp-controller="Schedules" asp-action="Display">Display Schedule</a></li>
+                                <li><a class="dropdown-item" asp-controller="Schedules" asp-action="Select">Select Schedule</a></li>
+                                <li><a class="dropdown-item" asp-controller="Schedules" asp-action="Index">List Season Schedules</a></li>
+                                <li><a class="dropdown-item" asp-controller="ScoreSheets" asp-action="Create">Create Score Sheets</a></li>
+                                <li><a class="dropdown-item" asp-controller="ScoreSheets" asp-action="List">List Score Sheets</a></li>
+                                <li><a class="dropdown-item" asp-controller="ScoreSheets" asp-action="Enter">Enter Scores</a></li>
+                            </ul>
+                        </li>
+
+
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Admin</a>
+                                <ul class="dropdown-menu">
+                                    @if (User.IsInRole("Db Admin"))
+                                    {
+                                        <li class="dropend">
+                                            <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                href="#" data-bs-auto-close="outside">Database</a>
+                                            <ul class="dropdown-menu submenu">
+                                                <li>
+                                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                        href="#" data-bs-auto-close="outside">Draft Entries</a>
+                                                    <ul class="dropdown-menu submenu">
+                                                        <li><a class="dropdown-item" asp-controller="Drafts" asp-action="Insert">Create Draft Entry</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Drafts" asp-action="Index">List All Entries</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Drafts" asp-action="List">List Draft Entries</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li>
+                                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                        href="#" data-bs-auto-close="outside">Payout Entries</a>
+                                                    <ul class="dropdown-menu submenu">
+                                                        <li><a class="dropdown-item" asp-controller="Payouts" asp-action="Insert">Create Payout Entry</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Payouts" asp-action="Index">List Payout Entries</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li>
+                                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                        href="#" data-bs-auto-close="outside">Player Entries</a>
+                                                    <ul class="dropdown-menu submenu">
+                                                        <li><a class="dropdown-item" asp-controller="Players" asp-action="Create">Create Player</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Players" asp-action="Index">List Player</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li>
+                                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                        href="#" data-bs-auto-close="outside">Portrait Entries</a>
+                                                    <ul class="dropdown-menu submenu">
+                                                        <li><a class="dropdown-item" asp-controller="Portraits" asp-action="List">List All</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Portraits" asp-action="UploadList">Upload List</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Portraits" asp-action="Display" asp-route-deceased="false">Slides Living</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Portraits" asp-action="Display" asp-route-deceased="true">Slides Deceased</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li>
+                                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                        href="#" data-bs-auto-close="outside">Ptlog Entries</a>
+                                                    <ul class="dropdown-menu submenu">
+                                                        <li><a class="dropdown-item" asp-controller="Ptlogs" asp-action="Create">Create Ptlog Entry</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Ptlogs" asp-action="Index">List Ptlog Entries</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li>
+                                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                        href="#" data-bs-auto-close="outside">Schedule Entries</a>
+                                                    <ul class="dropdown-menu submenu">
+                                                        <li><a class="dropdown-item" asp-controller="Schedules" asp-action="Insert">Create Schedule Entry</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Schedules" asp-action="Display">Display Schedule</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Schedules" asp-action="Select">Select Schedule</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Schedules" asp-action="Index">List Season Schedules</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Schedules" asp-action="List">List Schedule Entries</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li>
+                                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                        href="#" data-bs-auto-close="outside">Score Sheets</a>
+                                                    <ul class="dropdown-menu submenu">
+                                                        <li><a class="dropdown-item" asp-controller="ScoreSheets" asp-action="Create">Create Score Sheets</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="ScoreSheets" asp-action="Insert">Insert Score Sheet</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="ScoreSheets" asp-action="List">List Score Sheets</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="ScoreSheets" asp-action="Index">List All Score Sheets</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li>
+                                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                        href="#" data-bs-auto-close="outside">Sessions</a>
+                                                    <ul class="dropdown-menu submenu">
+                                                        <li><a class="dropdown-item" asp-controller="Sessions" asp-action="Create">Create Session</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Sessions" asp-action="Index">List Sessions</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li>
+                                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                        href="#" data-bs-auto-close="outside">Shark Entries</a>
+                                                    <ul class="dropdown-menu submenu">
+                                                        <li><a class="dropdown-item" asp-controller="Sharks" asp-action="Create">Create Shark Entry</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Sharks" asp-action="Index">List Shark Entries</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li>
+                                                    <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                        href="#" data-bs-auto-close="outside">Teams</a>
+                                                    <ul class="dropdown-menu submenu">
+                                                        <li><a class="dropdown-item" asp-controller="Teams" asp-action="Create">Create Team</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Teams" asp-action="List">List Teams</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Teams" asp-action="Roster">Team Rosters</a></li>
+                                                        <li><a class="dropdown-item" asp-controller="Teams" asp-action="Index">List All Teams</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    }
+
+
+                                    @if (User.IsInRole("Membership"))
+                                    {
+                                        <li class="dropend">
+                                            <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                href="#" data-bs-auto-close="outside">Membership</a>
+                                            <ul class="dropdown-menu submenu">
+                                                <li><a class="dropdown-item" asp-controller="Members" asp-action="Insert">Create New Member</a></li>
+                                                <li><a class="dropdown-item" asp-controller="Members" asp-action="Index">List Members</a></li>
+                                            </ul>
+                                        </li>
+                                    }
+
+
+                                    @if (User.IsInRole("Photographer"))
+                                    {
+                                        <li class="dropend">
+                                            <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                href="#" data-bs-auto-close="outside">Portraits</a>
+                                            <ul class="dropdown-menu submenu">
+                                                <li><a class="dropdown-item" asp-controller="Portraits" asp-action="List">List All</a></li>
+                                                <li><a class="dropdown-item" asp-controller="Portraits" asp-action="Display" asp-route-deceased="false">Slides Living</a></li>
+                                                <li><a class="dropdown-item" asp-controller="Portraits" asp-action="Display" asp-route-deceased="true">Slides Deceased</a></li>
+                                            </ul>
+                                        </li>
+                                    }
+
+
+                                    @if (User.IsInRole("RoleManager"))
+                                    {
+                                        <li class="dropend">
+                                            <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                href="#" data-bs-auto-close="outside">Roles</a>
+                                            <ul class="dropdown-menu submenu">
+                                                <li><a href="#" class="dropdown-item"><a class="dropdown-item" asp-area="" asp-controller="Role" asp-action="DisplayRoles">Display Roles</a></a></li>
+                                                <li><a href="#" class="dropdown-item"><a class="dropdown-item" asp-area="" asp-controller="Role" asp-action="AddRole">Add Role</a></a></li>
+                                                <li><a href="#" class="dropdown-item"><a class="dropdown-item" asp-area="" asp-controller="Role" asp-action="AddUserToRole">Add User to Role</a></a></li>
+                                                <li><a href="#" class="dropdown-item"><a class="dropdown-item" asp-area="" asp-controller="Role" asp-action="Index">User Role Management</a></a></li>
+                                            </ul>
+                                        </li>
+                                    }
+
+                                    @if (User.IsInRole("ScoreKeeper"))
+                                    {
+                                        <li class="dropend">
+                                            <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown"
+                                                href="#" data-bs-auto-close="outside">Scores</a>
+                                            <ul class="dropdown-menu submenu">
+                                                <li><a class="dropdown-item" asp-controller="ScoreSheets" asp-action="Enter">Enter Scores</a></li>
+                                            </ul>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+                <partial name="_LoginPartial" />
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2004-@DateTime.Now.Year.ToString() - OBGpgm - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

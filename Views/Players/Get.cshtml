@@ -1,0 +1,83 @@
+﻿@model OBGpgm.Models.Player
+
+<div>
+    <h4>Player</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StartWeek)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StartWeek)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EndWeek)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EndWeek)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsPlaying)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsPlaying)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsCaptain)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsCaptain)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SkillLevel)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SkillLevel)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DraftRound)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DraftRound)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsInDraft)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsInDraft)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsBeingTraded)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsBeingTraded)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Draft)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Draft.DraftId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Member)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Member.MemberId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Session)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Session.SessionId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Team)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Team.TeamId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action = "List">Back to List</a>
+</div>

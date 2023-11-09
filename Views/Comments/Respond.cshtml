@@ -1,0 +1,69 @@
+﻿@model OBGpgm.Models.Comment
+
+@inject SignInManager<ApplicationUser> signInManager;
+@{
+    ViewData["Title"] = "Add Opinion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    <script>
+        window.onload = function () {
+            var published = document.getElementById("published");
+            var div = document.getElementById("addButton");
+            if (published.checked == true) {
+                div.style.display = "block";
+            }
+            else {
+                div.style.display = "none";
+            }
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<div class="container">
+    <h1>Lost and Found</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <h4>Article</h4>
+    <hr />
+    <form asp-action="Insert">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input asp-for="authorId" class="form-control" type="hidden" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input asp-for="articleId" class="form-control" type="hidden" />
+            </div>
+            <div class="form-group col-md-4">
+                <input asp-for="email" class="form-control" type="hidden" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <div class="form-group">
+                    <h4><label asp-for="itemBody" class="control-label">Enter your response below:</label></h4>
+                    @Html.TextAreaFor(e => e.itemBody, 10, 55, null)
+                    <span asp-validation-for="itemBody" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input asp-for="pubDate" class="form-control" type="hidden" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input type="submit" value="Insert" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <a href="#" onclick='history.go(-1);'>Go Back to Previous</a>
+    </div>
+</div>
+
+
+

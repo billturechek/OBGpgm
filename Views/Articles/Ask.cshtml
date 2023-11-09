@@ -1,0 +1,88 @@
+﻿@model OBGpgm.Models.Article
+
+@inject SignInManager<ApplicationUser> signInManager;
+@{
+    ViewData["Title"] = "Ask";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    <script>
+        window.onload = function () {
+            var published = document.getElementById("published");
+            var div = document.getElementById("addButton");
+            if (published.checked == true) {
+                div.style.display = "block";
+            }
+            else {
+                div.style.display = "block";
+            }
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<div class="container">
+    <h1>Ask</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <h4>Question</h4>
+    <hr />
+    <form asp-action="Report">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input asp-for="articleId" type="hidden" class="form-control" readonly="readonly" />
+                <input asp-for="authId" class="form-control" type="hidden" />
+                <input asp-for="category" class="form-control" type="hidden" readonly="readonly" />
+                <input asp-for="topic" class="form-control" type="hidden" readonly="readonly" />
+                <input asp-for="pubDate" class="form-control" type="hidden" readonly="readonly" />
+                <input asp-for="lastModified" class="form-control" type="hidden" readonly="readonly" />
+                <input asp-for="slug" class="form-control" type="hidden" readonly="readonly" />
+                <input type="hidden" asp-for="topItem" class="form-control" value="false" />
+                <input type="hidden" asp-for="isPublished" class="form-control" value="false" />
+                <div class="form-group">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <h4><label asp-for="title" class="control-label">Item</label></h4>
+                <input asp-for="title" class="form-control" />
+                <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <div class="form-group">
+                    <h4><label asp-for="itemBody" class="control-label">Question</label></h4>
+                    <textarea rows="6" placeholder="Ask question here."
+                              asp-for="itemBody" class="form-control"></textarea>
+                    <span asp-validation-for="itemBody" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <div id="addButton" class="form-group">
+                    <h4><label class="control-label">Add photos:</label></h4>
+                    <a class="btn btn-primary disabled" asp-route-id="@Model.articleId"
+                       aria-describedby="fileHelpBlock"
+                       asp-controller="Photos" asp-action="Upload">Upload Photo</a>
+                    <small id="fileHelpBlock" class="form-text text-muted">
+                        You must first enter the question then you can update the question to add photographs.
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input type="submit" value="Report" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="List">Back to List</a>
+    </div>
+</div>
+
+
+

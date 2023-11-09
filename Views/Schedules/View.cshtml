@@ -1,0 +1,427 @@
+﻿@model ScheduleViewModel
+@{
+    ViewData["Title"] = "View Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var curSession = ViewBag.curSession as OBGpgm.Models.Session;
+    var season = (snType)int.Parse(curSession.Season.ToString());
+    var sid = curSession.SessionId;
+    const int NORM_WIDTH = 3; 
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<style>
+    :root {
+        --blue: #1e90ff;
+        --white: #ffffff;
+        --slotwidth: 3em;
+        --datewidth: 5em;
+    }
+    .Sched 
+    {
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+    }
+    .Sched-blank 
+    {
+        justify-content: center;
+        text-align:center;
+    }
+    .Sched-button
+    {
+        justify-content: center;
+        text-align:center;
+    }
+    .Sched-date 
+    {
+        display: flex;
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        align-items: center;
+        vertical-align:middle;
+        font-weight: bold;
+        width: var(--datewidth);
+    }
+    .Sched-dateSlot 
+    {
+        display: flex;
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        align-items: center;
+        font-weight: bold;
+        width: var(--datewidth);
+    }
+    .Sched-season 
+    {
+        justify-content: center;
+        text-align:center;
+    }
+    .Sched-tableLine 
+    {
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        vertical-align:middle;
+    }
+    .Sched-tables 
+    {
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        vertical-align:middle;
+        text-align:center;
+    }
+    .Sched-tablesLine 
+    {
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        vertical-align:middle;
+        font-weight:bold;  
+    }
+    .Sched-timesLine 
+    {
+        display: flex;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        align-items: center;
+        vertical-align:middle;
+        font-weight:bold;  
+    }
+    .Sched-timeSlot 
+    {
+        display: flex;
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        align-items: center;
+        width: var(--slotwidth);
+    }
+    .Sched-title 
+    {
+        justify-content: center;
+        text-align:center;
+    }
+    .Sched-weekLine 
+    {
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center; 
+        vertical-align:middle;
+    }
+    .schedSm {
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        width: var(--slotwidth);
+    }
+    .sched {
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+    }
+</style>
+
+@section Scripts{
+    <script>
+        /* this script sets the dropdown for teams */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Teams"]");
+        });
+    </script>
+}
+
+
+
+<div class="container-xxl justify-content-center">
+    <h1>View Schedule</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3> 
+
+        @{
+        var hteams = ViewBag.teams;
+        var hmatches = 0;
+        var totalMatches = ViewBag.numMatches;
+        var sessionTimes = ViewBag.sessionTimes;        
+        var tablesToUse = ViewBag.tableAssignment;
+        string[] theTables = ViewBag.numTables;
+        var tablesByMatches = ViewBag.tablesByMatches;
+        int matchesInSession = 0;
+        string ttu = tablesToUse;
+        string[] tbs = ttu.Split(" ");
+        int timeSlots = theTables.Length;
+        int numberOfColumns = (hteams / 2) + (hteams % 2) + 1;
+
+       IEnumerable<Schedule> data = Model.DataList;
+
+        int totalSessions = 0;
+        switch (totalMatches)
+        {
+            case < 10:
+                totalSessions = 1;
+                break;
+            case < 18:
+                totalSessions = 2;
+                break;
+            default:
+                totalSessions = 3;
+                break;                
+        }
+
+        if (hteams % 2 == 0)
+        {
+            hmatches = hteams / 2;
+        }
+        else
+        {
+            hmatches = (hteams / 2) + 1;
+        }
+        DateTime sDate = DateTime.Parse(curSession.StartDate);
+
+        int x = 0;
+        //var hrows = data.Count() / hmatches;
+    }
+    <form asp-action="Index" method="post" enctype="multipart/form-data">
+    <div class="row Sched">
+        <div class="col-3 Sched">
+            <a href="javascript:window.print()">Click to Print This Page</a>
+        </div>
+        <div class="col-3 Sched">
+            <button class="btn btn-primary" asp-action="MakeSheet" asp-route-id="@sid">Make Sheet</button>
+        </div>
+        <div class="col-3 Sched">
+            <button class="btn btn-primary" asp-action="MakeTeamSheet" asp-route-id="@sid">Make Team Sheets</button>
+        </div>
+    </div>
+    <div class="row Sched-title">
+        <div class="Sched-title col-@numberOfColumns text-center justify-content-center">
+            <h2>OBG Men's Billiard Club</h2>
+        </div>
+    </div>
+    <div class="row Sched-season">
+        <div class="Sched-season col-@numberOfColumns text-center justify-content-center">
+            <h3>@season @sDate.Year</h3>
+        </div>
+    </div>
+    <div class="row Sched-blank">
+        <div class="Sched-blank col-@numberOfColumns"></div>
+    </div>
+            
+    @* The following block is for the times line *@
+    <div class="row Sched-blank">
+        <div class="col-1 Sched-date Sched-tablesLine">
+                    
+        </div>                            
+        @foreach (string numOfMatches in theTables)
+        {                    
+            matchesInSession = int.Parse(numOfMatches);
+                int colWidth = (matchesInSession * NORM_WIDTH);
+                string colW = colWidth.ToString() + "em";
+                int numCols = 12 / matchesInSession;
+            string sTime = sessionTimes[x];
+            <div class="col-@matchesInSession Sched-dateSlot" style="width: @colW;">@sTime</div>
+            x++;
+        } 
+        @if(hteams%2>0){
+            <div class="col-1 Sched-timeSlot"></div>
+        }
+    </div>
+
+    @* The following block is for the tables line *@
+    <div class="row Sched-tablesLine">           
+        <div class="col-1 Sched-date">
+            Date
+        </div>
+        @foreach (string numOfMatches in theTables)
+        {         
+            int numCols = 12 / timeSlots;                         
+            matchesInSession = int.Parse(numOfMatches);   
+            string slotTables = tablesByMatches[matchesInSession];
+            string[] tableArray = slotTables.Split(" ");                                        
+            @for (int i = 0; i < @matchesInSession; i++)
+            {                                
+                <div class="col-1 Sched-timeSlot">@tableArray[i]</div>
+            } 
+        } 
+        @if(hteams%2>0){
+            <div class="col-1 Sched-timeSlot">Bye</div>
+        }
+    </div>
+
+        @{
+            var teams = ViewBag.teams;
+            var matches = 0;
+            if(teams % 2 == 0 )
+            {
+                matches = teams/2;
+            }
+            else
+            {
+                matches = (teams/2) + 1;
+            }
+
+            var rows = data.Count()/matches;
+            int increm = matches;
+        }
+
+
+
+
+    @* The following block is for the all the matches lines *@
+
+            
+    @for (var i = 0; i < data.Count(); i = i + increm)
+    { 
+        <div class="row Sched-weekLine">
+            <div class="col-1 Sched-date">                        
+                @sDate.AddDays(7 * (data.ElementAt(i).Week-1)).ToShortDateString()
+            </div>
+            @if(data.ElementAt(i).HomeTeam == 0)
+            {
+                increm = 1;
+                    int colmWdth = (matches * NORM_WIDTH);
+                    string colWd = colmWdth.ToString() + "em";
+                <div class="col-@matches Sched-dateSlot" style="width: @colWd;">
+                    @data.ElementAt(i).Note
+                </div>
+            }
+            else
+            {
+                @for (var m = 0; m < matches; m++)
+                {
+                    increm = matches;
+                    @if (data.ElementAt(i + m).VisitingTeam == 0)
+                    {
+                        <div class="Sched-timeSlot schedSm col-1">@data.ElementAt(i+m).HomeTeam</div>
+                    }
+                    else
+                    {
+                        <div class="Sched-timeSlot schedSm col-1 ">@data.ElementAt(i+m).HomeTeam-@data.ElementAt(i+m).VisitingTeam</div>
+                    }
+                }
+            }
+        </div>
+    }
+
+
+    </form>
+    <partial name="_DeleteModal" />
+    <partial name="_InsertModal" />
+</div>
+
+<input type="hidden" id="scheduleId" />
+<input type="hidden" id="scheduleWeek" />
+<input type="hidden" id="scheduleTeams" />
+<input type="hidden" id="scheduleNote" />
+
+                            
+<script>
+    $(document).ready(function () {
+        $("#btnInsert2").click(function () {
+            @*var scheduleFormData = $("#scheduleForm").serialize();*@
+            var sid = $("#scheduleId").val();
+            var week = $("#scheduleWeek").val();
+            var teams = $("#scheduleTeams").val();
+            var note = $("#scheduleNote").val();
+            var vmi = $("#scheduleForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Schedules/InsertWeek",
+                data: { vmi },
+                success: function () {
+                    window.location.href="/Schedule/Index";
+                }
+            })
+        })
+
+        $("#btnInsert").click(function () {
+            var sid = $("#scheduleId").val();
+            var week = $("#scheduleWeek").val();
+            var teams = $("#scheduleTeams").val();
+            
+            $.ajax({
+                type: "POST",
+                url: "/Schedules/InsertWeek",    //your action
+                data: $('#scheduleForm').serialize(),   //your form name.it takes all the values of model
+                dataType: 'json',
+                success: function (result) {
+                    if (result) {
+                        $("#insertModal").modal('hide');
+                        $("#scheduleId").val(null);
+                        window.location.href = "/Schedules/Index";
+                    } else {
+                        alert("Something went wrong while processing your request.");
+                    }
+                }
+
+            })
+            return false;
+        });
+
+
+        $("#btnClose").click(function () {
+            window.location.href = "/Schedules/Index";
+        })
+
+
+        $("#btnCancelEdit").click(function () {
+            window.location.href = "/Schedules/Index";
+        })
+
+
+        $("#btnDelete").click(function () {
+            var sid = $("#scheduleId").val();
+            var week = $("#scheduleWeek").val();
+            $.ajax({
+                type: "POST",
+                url: "/Schedules/DeleteWeek",
+                data: {id:sid, week:week},
+                success: function (result) {
+                    if (result) {
+                        $("#deleteModal").modal('hide');
+                        $("#scheduleId").val(null);
+                        window.location.href = "/Schedules/Index";
+                    } else {
+                        alert("Something went wrong while processing your request.");
+                    }
+                }
+            })
+        })
+
+        $("#btnCancelConfirm").click(function () {
+            window.location.href = "/Suppliers/Index";
+        })
+
+    }) 
+
+    var Confirm = function (id, week) {
+        $("#scheduleId").val(id);
+        $("#scheduleWeek").val(week)
+        $("#deleteModal").modal('show');
+    }
+
+    var Insert = function (id, week, teams, note) {
+        $("#scheduleId").val(id);
+        $("#scheduleWeek").val(week);
+        $("#scheduleTeams").val(teams);
+        $("#scheduleNote").val(note);
+        $("#formWeek").val(week);
+        $("#insertModal").modal('show');
+    }
+</script>

@@ -1,0 +1,123 @@
+﻿@model IEnumerable<OBGpgm.Models.Player>
+
+@{
+    ViewData["Title"] = "List Players";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Year"]");
+            $("span.id_200 select").val("@ViewData["Season"]");
+        });
+    </script>
+}
+
+
+<div class="container">
+    <h1>List Members Playing in Season</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+
+    <form asp-action="UploadList" method="get">
+        <div class="form-actions no-color">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label class="col-form-label">Year </label>
+                    <span class="id_100">
+                        <select asp-items="@ViewBag.Years" id="Year" name="Year"
+                            onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <label class="col-form-label">Season</label>
+                    <span class="id_200">
+                        <select asp-items="@ViewBag.Seasons" id="Season" name="Season"
+                            onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Select season</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <input id="btnSubmit" type="submit" value="Refresh" class="btn btn-primary" hidden />
+                </div>
+            </div>
+        </div>
+        
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.SessionId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member.PortraitId)
+                </th>
+                <th>
+                    Member Name
+                </th>
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="@(item.Member.IsDeceased  ? "deceased" : string.Empty) ">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SessionId)
+                    </td>
+                    @if(item.Member.PortraitId != null)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Member.PortraitId)
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    <td>
+                        @foreach (var mem in ViewBag.Members)
+                        {
+                            string thisMem = "";
+                            if (item.MemberId.ToString() == mem.Value)
+                            {
+                                thisMem = mem.Text;
+                                @(thisMem)
+                                break;
+                            }
+                        }
+                    </td>
+                    
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Upload" 
+                                class="btn btn-primary"
+                                asp-route-mid="@item.Member.MemberId.ToString()">Upload
+                            </a>
+                            @if (item.Member.PortraitId != null)
+                            {
+                                <a asp-action="Get" 
+                                    class="btn btn-info"
+                                    asp-route-id="@item.Member.PortraitId">View
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

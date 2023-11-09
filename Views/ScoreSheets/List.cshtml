@@ -1,0 +1,125 @@
+﻿@model IEnumerable<ScoreSheet>
+
+@{
+    ViewData["Title"] = "List Score Sheets";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            //$("span.id_100 select").val("@ViewData["Session"]");
+            var sess = this.querySelector("select.session");
+            sess.value = "@ViewData["Session"]".trim();
+            var week = this.querySelector("select.week");
+            week.value = "@ViewData["Week"]".trim();
+            //$("span.id_200 select").val("@ViewData["Week"]");
+        });
+    </script>
+}
+<div class="container">
+    <h1>List Score Sheets</h1>
+    
+    @if (User.IsInRole("Admin"))
+    {
+        @if (User.IsInRole("Admin"))
+        {
+            <p>
+                <a asp-action="Insert">Insert New Score Sheet</a>
+            </p>
+        }
+    }
+    <form asp-action="List" method="get">
+        <div class="form-actions no-color">
+            <p>
+                <div class="col-sm-10">
+                    <label class="col-sm-1 col-form-label" style="text-align: right">Season</label>
+                    <span class="id_100">
+                        <select asp-items="@ViewBag.SessionId" id="Year" name="Session"
+                                class="session col-sm-2" onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+
+                    <label class="col-sm-1 col-form-label" style="text-align: right">Week</label>
+                    <span class="id_200">
+                        <select id="Week" name="Week" class="week col-sm-1" asp-items="@ViewBag.Weeks"
+                                onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+
+                    <input type="submit" id="btnSubmit" hidden value="Refresh" class="btn btn-primary" /> 
+                </div>
+            </p>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                        @Html.DisplayNameFor(model => model.SsSessionId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SsWeek)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SsDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SsHteam)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SsHpoints)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SsVteam)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SsVpoints)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SsSessionId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SsWeek)
+                    </td>
+                    <td>
+                        @{
+                            DateTime thisD = (DateTime) item.SsDate;
+                            string ssDay = thisD.ToShortDateString();
+                            @(ssDay)
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SsHteam)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SsHpoints)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SsVteam)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SsVpoints)
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            @Html.ActionLink("Update | ", "Update", new { id = item.SsSessionId, week = item.SsWeek, hteam = item.SsHteam })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.SsSessionId, week = item.SsWeek, hteam = item.SsHteam })
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

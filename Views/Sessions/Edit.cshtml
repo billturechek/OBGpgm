@@ -1,0 +1,111 @@
+﻿@model OBGpgm.Models.Session
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var returnPage = Convert.ToInt32(ViewBag.returnPage);
+}
+
+<h1>Edit</h1>
+
+<h4>Session</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SessionId" />
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label>
+                <input asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Season" class="control-label"></label>
+                <input asp-for="Season" class="form-control" />
+                <span asp-validation-for="Season" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamsD1" class="control-label"></label>
+                <input asp-for="TeamsD1" class="form-control" />
+                <span asp-validation-for="TeamsD1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamsD2" class="control-label"></label>
+                <input asp-for="TeamsD2" class="form-control" />
+                <span asp-validation-for="TeamsD2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrentWeek" class="control-label"></label>
+                <input asp-for="CurrentWeek" class="form-control" />
+                <span asp-validation-for="CurrentWeek" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CurrentSeason" /> @Html.DisplayNameFor(model => model.CurrentSeason)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="President" class="control-label"></label>
+                <input asp-for="President" class="form-control" />
+                <span asp-validation-for="President" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VicePresident" class="control-label"></label>
+                <input asp-for="VicePresident" class="form-control" />
+                <span asp-validation-for="VicePresident" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Secretary" class="control-label"></label>
+                <input asp-for="Secretary" class="form-control" />
+                <span asp-validation-for="Secretary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Treasurer" class="control-label"></label>
+                <input asp-for="Treasurer" class="form-control" />
+                <span asp-validation-for="Treasurer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecondVp1" class="control-label"></label>
+                <input asp-for="SecondVp1" class="form-control" />
+                <span asp-validation-for="SecondVp1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecondVp2" class="control-label"></label>
+                <input asp-for="SecondVp2" class="form-control" />
+                <span asp-validation-for="SecondVp2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecondVp3" class="control-label"></label>
+                <input asp-for="SecondVp3" class="form-control" />
+                <span asp-validation-for="SecondVp3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecondVp4" class="control-label"></label>
+                <input asp-for="SecondVp4" class="form-control" />
+                <span asp-validation-for="SecondVp4" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DraftType" class="control-label"></label>
+                <input asp-for="DraftType" class="form-control" />
+                <span asp-validation-for="DraftType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-route-pg="@returnPage">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

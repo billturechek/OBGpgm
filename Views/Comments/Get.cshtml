@@ -1,0 +1,52 @@
+﻿@model OBGpgm.Models.Comment
+
+@{
+    ViewData["Title"] = "View Comment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="container">
+        <h1>View Article</h1>
+        <h4>MyFile</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.commentId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.commentId)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.articleId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.articleId)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.authorId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.authorId)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.email)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.email)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.itemBody)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.itemBody)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.pubDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.pubDate)
+            </dd>
+        </dl>
+        <div>
+            <a asp-action="List">Back to List</a>
+        </div>
+    </div>

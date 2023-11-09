@@ -1,0 +1,110 @@
+﻿@model Portrait
+
+@{
+    ViewData["Title"] = "Upload photo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script>
+</script>
+
+
+<div class="container">
+    <h1>Upload photograph</h1>
+    <h3 class="message text-success" id="Message"></h3>
+    <h4>Photo</h4>
+    <hr />
+
+    <form asp-action="Upload" method="post"
+            enctype="multipart/form-data">
+        <div class="form-group row">
+            <div class="form-group col-12 mb-3">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <label asp-for="Memberid" class="display-label"></label>
+                <span class="id_100">
+                    <select asp-for="Memberid" class="display-field"
+                            onchange="FillFields();" id="member"
+                            asp-items="@ViewBag.Members">
+                        <option value="">Please select</option>
+                    </select>
+                </span>
+                <span asp-validation-for="Memberid" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-10 mb-3">
+                <label asp-for="Notes" class="display-label"></label>
+                <input asp-for="Notes" class="display-field" />
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-12 mb-3">
+                <label asp-for="ImageFile" class="display-field"></label>
+                <input asp-for="ImageFile" id="Image" accept="image/*" class="display-field" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+        </div>
+        <div class="form-group row">
+            <div class="form-group col-md-12 mb-3">
+                <input id="Upload" disabled type="submit" value="Upload Photo" class="btn btn-primary" />
+
+                <input id="id" type="hidden" asp-for="Id" class="form-control" />
+                <input id="Title" type="hidden" asp-for="Title" class="form-control" />
+                <input id="FirstName" type="hidden" asp-for="Member.FirstName" class="form-control" />
+                <input id="LastName" type="hidden" asp-for="Member.LastName" class="form-control" />
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <a href='javascript:history.go(-1)'>Return to previous</a>
+    </div>
+    
+    @if (TempData["Message"] != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                var message = '@TempData["Message"]';
+                alert(message);
+                TempData["Message"].Clear();
+            };
+        </script>
+    }
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script>
+            $(function () {
+                $("span.id_100 select").val("@ViewData["MemberId"]");
+                var $submit = $('#Upload');
+                var $file = $('#Image');
+
+                $file.change(
+                    function () {
+                        $submit.attr('disabled', ($(this).val() ? false : true));
+                    }
+                );
+
+            })
+
+            function FillFields() {
+                var select = document.getElementById("member");
+                var option = select.options[select.selectedIndex];
+                if (option.value != "Please select") {
+                    var title = document.getElementById("Title");
+                    title = option.value;
+                    var fname = option.text;
+                    var fullname = fname.split(" ");
+                    var first = document.getElementById("FirstName");
+                    var last = document.getElementById("LastName");
+                    first.value = fullname[0];
+                    last.value = fullname[1];
+                }
+                var msg = document.getElementById("Message");
+                msg.value = "";
+            }
+        </script>
+    }
+</div>

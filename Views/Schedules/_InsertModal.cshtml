@@ -1,0 +1,33 @@
+﻿@model ScheduleViewModel
+@{
+}
+
+
+<div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="insertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="insertModalLabel">Insert Week Off</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="scheduleForm">
+                    <div class="mb-3">
+                        <label>Note</label>
+                        @Html.TextBoxFor(m => m.Note, new { @class="form-control" })
+                    </div>
+                    <input type="hidden" class="form-control" asp-for="@Model.Sid" />
+                    <input type="hidden" class="form-control" asp-for="@Model.Teams" />
+                    <input type="hidden" class="form-control" id="formWeek" asp-for="@Model.Week" />
+                    <input type="hidden" class="form-control" asp-for="@Model.DataList" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <a href="#" id="btnInsert" class="btn btn-primary mx-2">Insert</a>
+                    <a href="#" id="btnClose" class="btn btn-secondary">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

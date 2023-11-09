@@ -1,0 +1,52 @@
+﻿@model IEnumerable<OBGpgm.Models.Player>
+
+@{
+    ViewData["Title"] = "List Players";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <form asp-action="Create" method="post">
+        <div class="form-actions no-color">
+            <h2>Team Captains Report</h2>
+            <br />
+            <h4>Number of teams this session = @ViewBag.teamsNeeded</h4>
+            <h4>Captains obtained for next session = @ViewBag.teamsHave</h4>
+            <h3>@ViewBag.teamStatus</h3>
+            <button name="Assign" @ViewBag.assign type="submit" class="btn btn-primary">Assign Teams</button>
+            <a asp-controller="Players" asp-action="List">Correct captains list</a>
+            <hr />
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Count
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MemberId)
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int counter = 0;
+                @foreach (var item in Model)
+                {
+                    counter++;
+                    <tr>
+                        <td>
+                            @counter
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Member.FullName)
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,373 @@
+﻿@model ScheduleViewModel
+
+@{
+    ViewData["Title"] = "Select Schedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var curSession = ViewBag.curSession as OBGpgm.Models.Session;
+    var season = (snType)int.Parse(curSession.Season.ToString());
+
+}
+<style>
+    .Sched 
+    {
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+    }
+    .Sched-blank 
+    {
+        justify-content: center;
+        text-align:center;
+    }
+    .Sched-button
+    {
+        justify-content: center;
+        text-align:center;
+    }
+    .Sched-date 
+    {
+        display: flex;
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        align-items: center;
+        vertical-align:middle;
+        font-weight:bold;  
+        width: 6em;
+    }
+    .Sched-dateSlot 
+    {
+        display: flex;
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        align-items: center;
+        font-weight:bold; 
+        width: 6em;
+    }
+    .Sched-season 
+    {
+        justify-content: center;
+        text-align:center;
+    }
+    .Sched-tableLine 
+    {
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        vertical-align:middle;
+    }
+    .Sched-tables 
+    {
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        vertical-align:middle;
+        text-align:center;
+    }
+    .Sched-tablesLine 
+    {
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        vertical-align:middle;
+        font-weight:bold;  
+    }
+    .Sched-timesLine 
+    {
+        display: flex;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        align-items: center;
+        vertical-align:middle;
+        font-weight:bold;  
+    }
+    .Sched-timeSlot 
+    {
+        display: flex;
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center;
+        align-items: center;
+        width: 5em;
+    }
+    .Sched-title 
+    {
+        justify-content: center;
+        text-align:center;
+    }
+    .Sched-weekLine 
+    {
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        text-align:center; 
+        vertical-align:middle;
+    }
+    .schedSm {
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        width: 5em;
+    }
+    .sched {
+        border: 1px solid gray;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+</style>
+
+@section Scripts{
+    <script>
+        /* this script sets the dropdown for teams */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["SessionId"]");
+            $("span.id_300 select").val("@ViewData["Teams"]");
+        });
+    </script>
+}
+
+
+
+<div class="container-xxl justify-content-center">
+    <h1>Select Schedule</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <form asp-action="Select" method="get">
+        <div class="form-actions no-color">
+            <p>
+                <div class="col-sm-10">
+                    <label class="col-sm-1 col-form-label" style="text-align: right">Season</label>
+                    <span class="id_100">
+                            <select asp-items="@ViewBag.sessionList" id="Year" name="Id" class="session col-sm-2">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+
+                    <label class="col-sm-3 col-form-label" style="text-align:right">Number of Teams</label>
+                    <span class="id_300">
+                        <select id="Teams" name="Teams" class="col-sm-2">
+                            <option value="">Select # of teams</option>
+                            <option value="24">24</option>
+                            <option value="22">22</option>
+                            <option value="20">20</option>
+                            <option value="18">18</option>
+                            <option value="16">16</option>
+                            <option value="15">15</option>
+                            <option value="14">14</option>
+                            <option value="13">13</option>
+                            <option value="12">12</option>
+                            <option value="11">11</option>
+                            <option value="10">10</option>
+                            <option value="9">9</option>
+                            <option value="8">8</option>
+                        </select>
+                    </span>
+                    <input type="submit" name="Refresh" value="Refresh" class="btn btn-primary" />
+                </div>
+            </p>
+        </div>
+    </form>
+
+        @{
+        var hteams = int.Parse(ViewBag.teams);
+        var hmatches = 0;
+        var totalMatches = ViewBag.numMatches;
+        var sessionTimes = ViewBag.sessionTimes;        
+        var tablesToUse = ViewBag.tableAssignment;
+        string[] theTables = ViewBag.numTables;
+        var tablesByMatches = ViewBag.tablesByMatches;
+        int matchesInSession = 0;
+        string ttu = tablesToUse;
+        string[] tbs = ttu.Split(" ");
+        int timeSlots = theTables.Length;
+        int numberOfColumns = (hteams / 2) + (hteams % 2) + 1;
+        IEnumerable<Schedule> data = Model.DataList;
+
+        int totalSessions = 0;
+        switch (totalMatches)
+        {
+            case < 10:
+                totalSessions = 1;
+                break;
+            case < 18:
+                totalSessions = 2;
+                break;
+            default:
+                totalSessions = 3;
+                break;                
+        }
+
+        if (hteams % 2 == 0)
+        {
+            hmatches = hteams / 2;
+        }
+        else
+        {
+            hmatches = (hteams / 2) + 1;
+        }
+        DateTime sDate = DateTime.Parse(curSession.StartDate);
+        int sid = curSession.SessionId;
+
+        int x = 0;
+        var hrows = data.Count() / hmatches;
+    }
+    <form asp-action="Select" method="post" enctype="multipart/form-data">
+    <div class="row Sched">
+        <div class="col-12 Sched">
+            <div class="row Sched-title">
+                <div class="Sched-title col-@numberOfColumns text-center justify-content-center">
+                    <h2>OBG Men's Billiard Club</h2>
+                </div>
+            </div>
+            <div class="row Sched-season">
+                <div class="Sched-season col-@numberOfColumns text-center justify-content-center">
+                    <h3>@season @sDate.Year</h3>
+                </div>
+            </div>
+            <div class="row Sched-blank">
+                <div class="Sched-blank col-@numberOfColumns"></div>
+            </div>
+            
+            @* The following block is for the times line *@
+            <div class="row Sched-blank">
+                <div class="col-1 Sched-date Sched-tablesLine">
+                    
+                </div>                            
+                @foreach (string numOfMatches in theTables)
+                {                    
+                    matchesInSession = int.Parse(numOfMatches);
+                        int colWidth = (matchesInSession * 5);
+                        string colW = colWidth.ToString() + "em";
+                        int numCols = 12 / matchesInSession;
+                    string sTime = sessionTimes[x];
+                    <div class="col-@matchesInSession Sched-dateSlot" style="width: @colW;">@sTime</div>
+                    x++;
+                } 
+                @if(hteams%2>0){
+                    <div class="col-1 Sched-timeSlot"></div>
+                }
+            </div>
+
+            @* The following block is for the tables line *@
+            <div class="row Sched-tablesLine">           
+                <div class="col-1 Sched-date">
+                    Date
+                </div>
+                @foreach (string numOfMatches in theTables)
+                {         
+                    int numCols = 12 / timeSlots;                         
+                    matchesInSession = int.Parse(numOfMatches);   
+                    string slotTables = tablesByMatches[matchesInSession];
+                    string[] tableArray = slotTables.Split(" ");                                        
+                    @for (int i = 0; i < @matchesInSession; i++)
+                    {                                
+                        <div class="col-1 Sched-timeSlot">@tableArray[i]</div>
+                    } 
+                } 
+                @if(hteams%2>0){
+                    <div class="col-1 Sched-timeSlot">Bye</div>
+                }
+            </div>
+
+            @{                
+                var teams = int.Parse(ViewBag.teams);
+                var matches = 0;
+                if(teams % 2 == 0 )
+                {
+                    matches = teams/2;
+                }
+                else
+                {
+                    matches = (teams/2) + 1;
+                }
+
+                var rows = data.Count()/matches;
+            }
+
+
+
+
+            @* The following block is for the all the matches lines *@
+            
+            <form asp-action="Select" id="scheduleForm" method="post" enctype="multipart/form-data">  
+                @for (var i = 0; i < data.Count(); i = i + matches)
+                { 
+                    <div class="row Sched-weekLine">
+                        <div class="col-1 Sched-date">                        
+                            @sDate.AddDays(7 * (i/matches)).ToShortDateString()
+                        </div>
+                        @for (var m = 0; m < matches; m++)
+                        {
+                            @if(data.ElementAt(i+m).VisitingTeam==0)
+                            {
+                                <div class="Sched-timeSlot schedSm col-1">@data.ElementAt(i+m).HomeTeam</div>
+                            }
+                            else
+                            {
+                                <div class="Sched-timeSlot schedSm col-1 ">@data.ElementAt(i+m).HomeTeam-@data.ElementAt(i+m).VisitingTeam</div>
+                            }                         
+                        }
+                    </div>
+                }
+            </form>
+            <p></p>
+            <div class="form-group Sched-button">
+                <a href="#" id="showModal" class="btn btn-primary"
+                    onclick="Save(@sid, @data.ElementAt(0).Teams)">Save Schedule</a>
+                    @*<input id="btnSave" type="submit" value="Save Schedule" class="btn btn-primary" />*@
+            </div>
+        </div>
+    </div>
+
+    </form>
+    <partial name="_SaveConfirmModal" />
+</div>
+
+
+
+<input type="hidden" id="scheduleId" />
+<input type="hidden" id="scheduleTeams" />
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>    
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            var sid = $("#scheduleId").val();
+            var teams = $("#scheduleTeams").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Schedules/Select",
+                data: { id: sid, teams: teams },
+                success: function () {
+                    window.location.href="/Schedules/Select";
+                }
+            })
+        })
+
+        $("#btnCancel").click(function () {
+            window.location.href = "/Schedules/Select";
+        })
+    })
+
+    var Save = function (id, teams) {
+        $("#scheduleId").val(id);
+        $("#scheduleTeams").val(teams)
+        $("#saveConfirmModal").modal('show');
+    }
+</script>

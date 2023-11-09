@@ -1,0 +1,171 @@
+﻿@model IEnumerable<OBGpgm.Models.Player>
+
+@{
+    ViewData["Title"] = "List Birthdays";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["Year"]");
+            $("span.id_200 select").val("@ViewData["Season"]");
+        });
+    </script>
+}
+
+
+<div class="container">
+    <h1>List Birthday of Members Playing in Season</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+
+    <form asp-action="ListBdays" method="get">
+        <div class="form-actions no-color">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label class="col-form-label">Year </label>
+                    <span class="id_100">
+                        <select asp-items="@ViewBag.Years" id="Year" name="Year"
+                                onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <label class="col-form-label">Season</label>
+                    <span class="id_200">
+                        <select asp-items="@ViewBag.Seasons" id="Season" name="Season" 
+                            onchange="document.getElementById('btnSubmit').click();">
+                            <option value="">Select season</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="col-sm-2">
+                    <input id="btnSubmit" type="submit" value="Refresh" class="btn btn-primary" hidden/> 
+                    @if (User.IsInRole("Admin"))
+                    {                        
+                        <button class="btn btn-info"
+                            name="make"
+                            type="submit"
+                            asp-controller="Players"
+                            asp-action="MakeBdSheet">
+                            Make Sheet
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.SessionId)
+                </th>
+                <th>
+                    Member Name
+                </th>
+                <th>
+                    Team Name
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member.Bday)
+                </th>
+                <th>
+                    Age
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="@(item.Member.IsDeceased  ? "table-secondary" : string.Empty) ">
+                
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SessionId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Member.FullName)
+                    </td>
+                    <td>
+                        @foreach (Team team in ViewBag.Teams)
+                        {
+                            string thisTeam = "";
+                            if (item.Team.TeamId > 0)
+                            {
+                                if (team.TeamId == item.TeamId)
+                                {
+                                    thisTeam = team.TeamName;
+                                    @(thisTeam)
+                                    break;
+                                }
+                            }
+                        }
+                    </td>
+                    <td>
+                        @{
+                            DateTime thisD = (DateTime) item.Member.Bday;
+                            string bDay = thisD.ToShortDateString();
+                                @(bDay)
+                        }
+                    </td>
+                    <td>
+                        @{
+                            DateTime n;
+                            DateTime minDate = new DateTime(1910, 1, 1);
+                            DateTime bD = (DateTime)item.Member.Bday;
+                            DateTime st = Convert.ToDateTime(item.Session.StartDate);
+                            if (bD > minDate)
+                            {
+                                if (item.Session.CurrentSeason)
+                                    n = DateTime.Now;
+                                else
+                                    n = st;
+                                int age = n.Year - bD.Year;
+                                if (n.Month < bD.Month || (n.Month == bD.Month && n.Day < bD.Day))
+                                    age--;
+                                @(age)
+                            }
+                            else
+                            {
+                                @("?")
+                            }
+                        }
+                    </td>
+
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            if (item.Member.PortraitId != null && item.Member.PortraitId > 0)
+                            {
+                                <a asp-action="Show" asp-controller="Portraits" asp-route-id="@item.Member.PortraitId">View | </a>
+                            }
+                            else
+                            {
+                                <a asp-action="Get" asp-route-id="@item.PlayerId">View | </a>
+                            }
+                            <a asp-action="Update" asp-route-id="@item.PlayerId">Update | </a>
+                            <a asp-action="Delete" asp-route-id="@item.PlayerId">Delete</a>
+                        }
+                        else
+                        {
+                            if (item.Member.PortraitId != null && item.Member.PortraitId > 0)
+                            {
+                                <a asp-action="Show" asp-controller="Portraits" asp-route-id="@item.Member.PortraitId">View</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Get" asp-route-id="@item.PlayerId">View</a>
+                            }
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,82 @@
+﻿@model OBGpgm.Models.ScoreSheet
+
+@{
+    ViewData["Title"] = "Update ScoreSheet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var returnPage = Convert.ToInt32(ViewBag.returnPage);
+}
+
+<div class="container">
+    <h1>Edit</h1>
+
+    <h4>Update ScoreSheet</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Update">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label asp-for="SsSessionId" class="control-label"></label>
+                        <input asp-for="SsSessionId" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="SsSessionId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="SsDivision" class="control-label"></label>
+                        <input asp-for="SsDivision" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="SsDivision" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label asp-for="SsWeek" class="control-label"></label>
+                        <input asp-for="SsWeek" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="SsWeek" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="SsDate" class="control-label"></label>
+                        <input asp-for="SsDate" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="SsDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label asp-for="SsHteam" class="control-label"></label>
+                        <input asp-for="SsHteam" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="SsHteam" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="SsHpoints" class="control-label"></label>
+                        <input asp-for="SsHpoints" class="form-control" />
+                        <span asp-validation-for="SsHpoints" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label asp-for="SsVteam" class="control-label"></label>
+                        <input asp-for="SsVteam" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="SsVteam" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="SsVpoints" class="control-label"></label>
+                        <input asp-for="SsVpoints" class="form-control" />
+                        <span asp-validation-for="SsVpoints" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index" asp-route-pg="@returnPage">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>

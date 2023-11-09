@@ -1,0 +1,85 @@
+﻿@model OBGpgm.Models.Player
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Player</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SessionId" class="control-label"></label>
+                <select asp-for="SessionId" class ="form-control" asp-items="ViewBag.SessionId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamId" class="control-label"></label>
+                <select asp-for="TeamId" class ="form-control" asp-items="ViewBag.TeamId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MemberId" class="control-label"></label>
+                <select asp-for="MemberId" class ="form-control" asp-items="ViewBag.MemberId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DraftId" class="control-label"></label>
+                <select asp-for="DraftId" class ="form-control" asp-items="ViewBag.DraftId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartWeek" class="control-label"></label>
+                <input asp-for="StartWeek" class="form-control" />
+                <span asp-validation-for="StartWeek" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndWeek" class="control-label"></label>
+                <input asp-for="EndWeek" class="form-control" />
+                <span asp-validation-for="EndWeek" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsPlaying" /> @Html.DisplayNameFor(model => model.IsPlaying)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsCaptain" /> @Html.DisplayNameFor(model => model.IsCaptain)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="SkillLevel" class="control-label"></label>
+                <input asp-for="SkillLevel" class="form-control" />
+                <span asp-validation-for="SkillLevel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DraftRound" class="control-label"></label>
+                <input asp-for="DraftRound" class="form-control" />
+                <span asp-validation-for="DraftRound" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsInDraft" /> @Html.DisplayNameFor(model => model.IsInDraft)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsBeingTraded" class="control-label"></label>
+                <input asp-for="IsBeingTraded" class="form-control" />
+                <span asp-validation-for="IsBeingTraded" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,60 @@
+﻿@model OBGpgm.Models.Portrait
+
+@{
+ViewData["Title"] = "Living Members";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .carousel-item 
+    {
+        height: 32rem;
+        background: #777;
+    }
+</style>
+
+<div class="container">
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-interval="500" data-wrap="true">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Living members</h1>
+            </div>
+        </div>
+        <div class="carousel-inner">
+        @{
+            bool first = true;
+            foreach (Portrait i in ViewBag.Images)
+            {
+                if (first)
+                {
+                    <div class="carousel-item active text-center" data-bs-interval="5000">
+                        <img class="img-responsive full-width rounded-lg"
+                                src="data:image/jpeg;base64,@Convert.ToBase64String(i.LargeImage)" />
+                        <div class="carousel-caption text-left d-none d-md-block">
+                            <h3>@i.Member.FirstName @i.Member.LastName</h3>
+                        </div>
+                    </div>
+                    first = false;
+                }
+                else
+                {
+                    <div class="carousel-item text-center" data-bs-interval="5000">
+                        <img class="img-responsive full-width rounded-lg"
+                                src="data:image/jpeg;base64,@Convert.ToBase64String(i.LargeImage)" />
+                        <div class="carousel-caption text-left d-none d-md-block">
+                            <h3>@i.Member.FirstName @i.Member.LastName</h3>
+                        </div>
+                    </div>
+                }
+            }
+            <a class="carousel-control-prev" rolee="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </a>
+                <a class="carousel-control-next" role="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </a>
+        }
+        </div>
+    </div>
+    <a href="#" onclick='history.go(-1);'> | Go Back to Previous</a>
+</div>
+

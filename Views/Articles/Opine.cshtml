@@ -1,0 +1,89 @@
+﻿@model OBGpgm.Models.Article
+@{
+    ViewData["Title"] = "Express Opinion        ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    <script>
+        window.onload = function () {
+            var published = document.getElementById("published");
+            var div = document.getElementById("addButton");
+            if (published.checked == true) {
+                div.style.display = "block";
+            }
+            else {
+                div.style.display = "block";
+            }
+        }
+    </script>
+}
+
+<div class="container">
+    <h1>Express Your Opinion</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <hr />
+    @using (Html.BeginForm("Opine", "Article", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post,  true, new { @class = "form-horizontal", role = "form" }))
+    //@using (Html.BeginForm("Opine", "Article", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input name="articleId" type="hidden" class="form-control" value="@Model.articleId" />
+                <input name="authId" type="hidden" class="form-control" value="@Model.authId" />
+                <input name="category" type="hidden" class="form-control" value="@Model.category" />
+                <input name="topic" class="form-check-input" type="hidden" value="@Model.topic" />
+                <input name="topItem" class="form-check-input" type="hidden" value="@Model.topItem" />
+                <input name="isPublished" id="published" type="hidden" class="form-check-input" value="@Model.isPublished" />
+                <input name="pubDate" type="hidden" class="form-control" value="@Model.pubDate" />
+                <input name="lastModified" type="hidden" class="form-control" value="@Model.lastModified" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <h4><label asp-for="title" class="control-label">Title</label></h4>
+                <input name="title" class="form-control" />
+                <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <h4><label asp-for="slug" class="control-label">Short Tease</label></h4>
+                <textarea rows="5" placeholder="Short tease for the link on home page."
+                          name="slug" class="form-control"></textarea>
+                <span asp-validation-for="slug" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <div class="form-group">
+                    <h4><label asp-for="itemBody" class="control-label">Your Opinion</label></h4>
+                    <textarea rows="6"  placeholder="Enter your 2-cents here."
+                              name="itemBody" class="form-control"></textarea>
+                    <span asp-validation-for="itemBody" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-4">
+                <div id="addButton" class="form-group">
+                    <h4><label class="control-label">Add photos below:</label></h4>
+                    <a class="btn btn-primary" asp-route-id="@Model.articleId"
+                       aria-describedby="fileHelpBlock"
+                       asp-controller="Photos" asp-action="Upload">Upload Photo</a>
+                    <small id="fileHelpBlock" class="form-text text-muted">
+                        You must first enter this article then you can update the article to add photographs.
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input type="submit" value="Insert" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+
+    <div>
+        <a asp-action="List">Back to List</a>
+    </div>
+</div>
+

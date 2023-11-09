@@ -1,0 +1,63 @@
+﻿@model OBGpgm.Models.Photo
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1>Edit</h1>
+
+    <h4>Image</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Update" method="post"
+                  enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="id" />
+                <input type="hidden" asp-for="largeImage" />
+                <input type="hidden" asp-for="thumbImage" />
+                <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.thumbImage)" />
+                <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="articleId" class="control-label"></label>
+                        <input asp-for="articleId" class="form-control" />
+                        <span asp-validation-for="articleId" class="text-danger"></span>
+                    </div>
+                    <label asp-for="memberId" class="control-label"></label>
+                    <input asp-for="memberId" class="form-control" />
+                    <span asp-validation-for="memberId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="caption" class="control-label"></label>
+                    <input asp-for="caption" class="form-control" />
+                    <span asp-validation-for="caption" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="largeImage" class="control-label"></label>
+                    <label asp-for="thumbImage" class="control-label"></label>
+                    <input type="file" id="file1"
+                           name="file1"
+                           multiple="multiple" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="notes" class="control-label"></label>
+                    <input asp-for="notes" class="form-control" />
+                    <span asp-validation-for="notes" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="List">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>

@@ -1,0 +1,56 @@
+﻿@model OBGpgm.Models.Photo
+
+@{
+    ViewData["Title"] = "Upload photo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1>Upload photograph</h1>
+    <h3 class="message text-success">@TempData["Message"]</h3>
+    <h4>Photo</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Upload" method="post"
+                  enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="memberId" class="control-label"></label>
+                    <input asp-for="memberId" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group">
+                    <h4><label asp-for="articleId" class="control-label"></label></h4>
+                    <input asp-for="articleId" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="articleId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="caption" class="control-label"></label>
+                    <input asp-for="caption" class="form-control" />
+                    <span asp-validation-for="caption" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="notes" class="control-label"></label>
+                    <input asp-for="notes" class="form-control" />
+                    <span asp-validation-for="notes" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImageFile" class="control-label"></label>
+                    <input asp-for="ImageFile" accept="image/*" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Upload Photo" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="List">Back to List</a>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

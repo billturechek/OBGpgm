@@ -1,0 +1,93 @@
+﻿@model IEnumerable<OBGpgm.Models.Draft>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DraftType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DraftTeamId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DraftPlayerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DraftRound)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DraftPosition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DraftSelection)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DraftDivision)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DraftPreDraft)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DraftSession)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DraftType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DraftTeamId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DraftPlayerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DraftRound)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DraftPosition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DraftSelection)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DraftDivision)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DraftPreDraft)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DraftSession.SessionId)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.DraftId" asp-route-pg="@pager.CurrentPage">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.DraftId" asp-route-pg="@pager.CurrentPage">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DraftId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<partial name="_pager" model="@pager" />

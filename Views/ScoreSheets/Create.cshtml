@@ -1,0 +1,45 @@
+﻿
+@model OBGpgm.Models.ScoreSheet
+@{
+    @* ViewData["Title"] = "Create Score Sheets"; *@
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        /* this script sets the two dropdowns for year and season */
+        $(function () {
+            $("span.id_100 select").val("@ViewData["session"]");
+            $("span.id_200 select").val("@ViewData["numWeeks"]");
+            $("input#startDate").val("@ViewData["startDate"]");
+            $("input#skipDate").val("@ViewData["skipDate"]");
+            $("input#skipList").val("@ViewBag.skipList");
+        })
+
+
+    </script>
+}
+<div class="container">
+    <h1>Create Score Sheets</h1>    `
+
+    <h3 class="message text-success">@TempData["Message"]</h3>
+
+    <form asp-controller="ScoreSheets" asp-action="Create" method="post">
+        <div class="form-actions no-color">
+            <div class="form-row mb-5">
+                <div class="form-group col-sm-4">
+                    <label class="col-form-label" style="text-align: right">Session</label>
+                    <span class="id_100">
+                        <select asp-items="@ViewBag.SessionId" id="session" name="session" class="col-sm-4">
+                            <option value="">Please select</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                    <input type="submit" name="submit" value="Create" class="btn btn-primary" /> |
+                    <input type="submit" name="submit" value="Make Printable" class="btn btn-secondary" />
+            </div>
+        </div>
+    </form>
+</div>

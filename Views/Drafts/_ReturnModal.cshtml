@@ -1,0 +1,33 @@
+﻿@model DraftViewModel
+@{
+}
+
+
+<div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="returnModalLabel">Return to Draft Pool</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="draftForm">
+                    <div class="mb-3">
+                        <label>Player</label>
+                        @Html.TextBoxFor(m => m.player.Member.FullName, new { @class="form-control", id="pName" })
+                    </div>
+                    <input type="hidden" class="form-control" asp-for="@Model.draft" />
+                    <input type="hidden" class="form-control" asp-for="@Model.player" />
+                    <input type="hidden" class="form-control" asp-for="@Model.team" />
+                    <input type="hidden" class="form-control" asp-for="@Model.member" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <a href="#" id="btnReturn" class="btn btn-primary mx-2">Return Player</a>
+                    <a href="#" id="btnClose" class="btn btn-secondary">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
