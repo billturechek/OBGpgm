@@ -8,12 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Identity\Pages\Account\LoginX.cshtml.cs" />
     <Compile Remove="Models\ObgDbContext.cs" />
     <Compile Remove="ViewModels\Article.cs" />
     <Compile Remove="ViewModels\Comment.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Identity\Pages\Account\LoginX.cshtml" />
     <Content Remove="Views\Schedules\CustomizeOld.cshtml" />
     <Content Remove="Views\Schedules\IndexSave.cshtml" />
     <Content Remove="Views\Schedules\SelectOld.cshtml" />
