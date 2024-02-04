@@ -1,0 +1,11 @@
+Connection Information for obgdb
+You can use these database connection details, for example, 
+when you are asked to specify ones during installation of a web app.
+
+Host:     P3NWPLSK12SQL-v02.shr.prod.phx3.secureserver.net:1433
+
+Database name:  obgdb
+
+User name:      obgdb
+
+Password:       1Newpw4test2day*

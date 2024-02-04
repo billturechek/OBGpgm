@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using NuGet.ProjectModel;
 using OBGpgm.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,14 +26,17 @@ namespace OBGpgm.Controllers
         public IActionResult Index2(string report="Schedules", string format="pdf")
         {
             string dir = "Archives/" + report + "/" + format + "/";
-            //Fetch all files in the Folder (Directory).
+            //Fetch all files in the Folder (Direfilectory).
+            string lpath = Environment.WebRootPath;
+            string lfile = "";
             string[] filePaths = Directory.GetFiles(Path.Combine(Environment.WebRootPath, dir));
 
             //Copy File names to Model collection.
             List<FileModel> files = new List<FileModel>();
             foreach (string filePath in filePaths)
             {
-                files.Add(new FileModel { FileName = Path.GetFileName(filePath) });
+                lfile = filePath.Substring(filePath.LastIndexOf(lpath) + 1);
+                files.Add(new FileModel { FileName = Path.GetFileName(filePath), FileDir = lpath });
             }
 
             var newfiles = files.OrderByDescending(x => x.FileName).ToList();
@@ -80,7 +84,6 @@ namespace OBGpgm.Controllers
 
             path = path + fileName;    
                     
-
             //Read the File data into Byte Array.
             byte[] bytes = System.IO.File.ReadAllBytes(path);
 

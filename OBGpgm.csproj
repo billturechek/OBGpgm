@@ -10,6 +10,7 @@
   <ItemGroup>
     <Compile Remove="Areas\Identity\Pages\Account\LoginX.cshtml.cs" />
     <Compile Remove="Models\ObgDbContext.cs" />
+    <Compile Remove="Models\Photox.cs" />
     <Compile Remove="ViewModels\Article.cs" />
     <Compile Remove="ViewModels\Comment.cs" />
   </ItemGroup>
